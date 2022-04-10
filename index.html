@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Saturo Global</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Verdana">
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+
+    <style>
+        .head {
+            text-align: center;
+            font-family: verdana;
+        }
+
+        .textarea {
+            margin-left: 30%;
+        }
+
+        #form1 {
+            margin-left: 56%;
+        }
+
+        .button {
+            width: 100px;
+            background-color: blue;
+            color: white;
+            padding: 10px 0px;
+            border-radius: 5px;
+            border: none !important;
+            font-family: verdana;
+            font-size: large;
+        }
+
+        .button1 {
+            width: 120px;
+            background-color: #808080;
+            color: white;
+            padding: 6px 0px 10px 0px;
+            border-radius: 5px;
+            border: none !important;
+            font-family: verdana;
+            font-size: large;
+        }
+
+        #form2 {
+
+            margin-left: 30%;
+        }
+
+        .input {
+            width: 27%;
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        .label {
+            font-family: verdana;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        $('#clear').click(function (event) {
+            event.preventDefault();
+            $('#url').val("");
+        });
+    </script>
+</head>
+
+
+<body>
+    <div class="row">
+        <h1 id="info1" class="head">Saturo Global</h1>
+    </div>
+
+    <form id="form2" enctype="multipart/form-data">
+        <input type="file" name="files" class="btn btn-primary" id="file" multiple>
+        <button class="btn btn-primary" type="button" style="border-radius: 4px;">Upload</button>
+    </form>
+
+
+</body>
+
+</html>

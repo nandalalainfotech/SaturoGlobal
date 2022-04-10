@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="451.407px" height="448.478px" viewBox="0 0 451.407 448.478" enable-background="new 0 0 451.407 448.478"
+	 xml:space="preserve">
+<g id="Background">
+	<circle fill="#ebf5fe" cx="227.168" cy="224.239" r="224.239"/>
+</g>
+<g id="Element">
+	<polyline fill="#FFFFFF" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" points="
+		2.93,356.77 2.93,317.216 439.49,317.216 439.49,356.77 	"/>
+	
+		<line fill="#FFFFFF" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" x1="39.554" y1="356.77" x2="234.395" y2="356.77"/>
+	
+		<line fill="#FFFFFF" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" x1="254.903" y1="356.77" x2="347.197" y2="356.77"/>
+	<g>
+		<rect x="152.356" y="264.477" fill="#F1F2F2" width="60.063" height="41.02"/>
+		<g>
+			<path fill="#41a1f0" d="M323.757,89.639c0-8.49-6.748-15.608-15.612-15.608H55.268c-8.865,0-15.714,7.118-15.714,15.608v127.959
+				h284.203V89.639z"/>
+			<path fill="#FFFFFF" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" d="M39.554,217.598
+				v32.58c0,8.493,6.849,14.299,15.714,14.299h252.877c8.864,0,15.612-5.806,15.612-14.299v-32.58H39.554z"/>
+		</g>
+		<circle fill="#41a1f0" cx="181.708" cy="240.594" r="9.923"/>
+		
+			<rect x="139.172" y="305.496" fill="#BCBEC0" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" width="83.503" height="11.72"/>
+		
+			<rect x="57.133" y="90.146" fill="#3B9ADA" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" width="249.045" height="127.452"/>
+		<g opacity="0.3">
+			<rect x="74.713" y="166.323" fill="#FFFFFF" width="216.815" height="32.229"/>
+			<rect x="149.426" y="129.699" fill="#FFFFFF" width="142.103" height="27.835"/>
+			<rect x="76.178" y="129.699" fill="#FFFFFF" width="58.599" height="27.835"/>
+			<rect x="76.178" y="107.725" fill="#FFFFFF" width="215.351" height="13.185"/>
+		</g>
+	</g>
+	<rect x="344.267" y="261.547" fill="#FFFFFF" width="61.529" height="52.738"/>
+	
+		<rect x="334.012" y="241.037" fill="#E6E7E8" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" width="82.039" height="20.51"/>
+	
+		<line fill="none" stroke="#41a1f0" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" x1="375.031" y1="242.502" x2="375.031" y2="210.272"/>
+	<g>
+		<path fill="#41a1f0" d="M341.416,176.517c0,0-1.513,36.201,34.883,34.884C376.299,211.4,380.2,176.517,341.416,176.517z"/>
+		
+			<line fill="none" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" x1="353.604" y1="188.812" x2="376.394" y2="211.602"/>
+	</g>
+	<g>
+		<path fill="#41a1f0" d="M410.141,176.278c0,0-36.201-1.511-34.884,34.885C375.257,211.163,410.141,215.062,410.141,176.278z"/>
+		
+			<line fill="none" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" x1="397.846" y1="188.467" x2="375.056" y2="211.257"/>
+	</g>
+	<g>
+		
+			<rect x="243.185" y="302.565" fill="#F1F2F2" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" width="48.344" height="14.65"/>
+		
+			<line fill="#FFFFFF" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" x1="266.624" y1="302.565" x2="266.624" y2="309.891"/>
+	</g>
+	<g>
+		<g>
+			
+				<rect x="27.834" y="271.802" fill="#FFFFFF" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" width="61.528" height="45.414"/>
+			
+				<rect x="27.834" y="257.151" fill="#D1D3D4" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" width="61.528" height="14.65"/>
+		</g>
+		<path fill="none" stroke="#231F20" stroke-width="5.8599" stroke-linejoin="round" stroke-miterlimit="10" d="M27.834,257.151
+			H8.789v24.774c0,0,4.35,15.181,18.225,15.181"/>
+	</g>
+</g>
+</svg>
