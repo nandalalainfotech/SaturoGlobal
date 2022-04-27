@@ -1,0 +1,6 @@
+/node_modules
+/package-lock.json
+/public/.angular
+/public/dist
+/public/node_modules
+/public/package-lock.json

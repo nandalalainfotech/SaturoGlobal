@@ -1,0 +1,34 @@
+
+/* You can add global styles to this file, and also import other style files */
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+@import "~ag-grid-community/dist/styles/ag-theme-fresh.css";
+@import "~ag-grid-community/dist/styles/ag-theme-material.css";
+@import "~ag-grid-community/dist/styles/ag-theme-alpine.css";
+@import "~ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine-mixin";
+// @import "scrollbars.scss";
+
+ .ag-theme-alpine {
+ @include ag-theme-alpine(( cell-horizontal-border: solid ag-derived(secondary-border-color), ));
+    .ag-header-cell {
+        border-right: 1px solid ag-param(secondary-border-color);
+    }
+} 
+
+.ag-theme-balham .ag-ltr .ag-cell {
+    border-right: 1px solid rgb(228, 225, 225);
+}
+
+.form-group input.ng-invalid.ng-touched,
+
+.form-group select.ng-invalid.ng-touched,
+.form-group textarea.ng-invalid.ng-touched,
+.form-submit input.ng-invalid,
+.form-submit select.ng-invalid,
+.form-submit textarea.ng-invalid
+{
+    border-color:red;
+}
+.invalid-feedback{
+   color: red;
+}

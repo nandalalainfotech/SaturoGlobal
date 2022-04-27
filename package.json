@@ -23,6 +23,7 @@
     "fs": "0.0.1-security",
     "glob": "^7.2.0",
     "html-pdf": "^3.0.1",
+    "js2xmlparser": "^4.0.2",
     "markdown-pdf": "^10.0.0",
     "multer": "^1.4.4",
     "path": "^0.12.7",
@@ -31,6 +32,9 @@
     "phantomjs-prebuilt": "^2.1.16",
     "reflect-metadata": "0.1.13",
     "serve-favicon": "^2.5.0",
+    "xlsx": "^0.18.5",
+    "xml-js": "^1.6.11",
+    "xml2js": "^0.4.23",
     "xmlbuilder": "^15.1.1"
   }
 }

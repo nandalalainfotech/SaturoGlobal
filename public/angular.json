@@ -30,7 +30,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/assets/styles.css"
+              "src/assets/styles.css",
+              "src/assets/styles.scss"
             ],
             "scripts": []
           },
@@ -39,13 +40,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "3mb",
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2mb",
-                  "maximumError": "4mb"
+                  "maximumWarning": "3mb",
+                  "maximumError": "5mb"
                 }
               ],
               "fileReplacements": [
