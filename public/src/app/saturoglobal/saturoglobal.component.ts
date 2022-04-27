@@ -216,7 +216,7 @@ export class saturoglobalComponent implements OnInit {
 				if (event.type === HttpEventType.UploadProgress) {
 					this.percentDone = Math.round(100 * event.loaded / (event.total ? event.total : 1));
 				} else if (event instanceof HttpResponse) {
-					console.log("event=============>", event);
+					console.log("event=============>", event.body);
 					this.gridOptions?.api?.setRowData(event.body);
 					this.uploadSuccess = true;
 					this.selectedFile = null;
