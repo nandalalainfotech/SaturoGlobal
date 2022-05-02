@@ -39,7 +39,7 @@ var storage = multer.diskStorage({
 
 
 app.get('/uploads/xmlfiles/:originalfilename', function (req, res, next) {
-    console.log(req);
+    // console.log(req);
     var filePath = path.join(`./uploads/xmlfiles/`) + req.params.originalfilename;
     const filestream = fs.createReadStream(filePath);
     filestream.pipe(res);
@@ -57,68 +57,37 @@ app.post('/upload', function (req, res, next) {
         const sheet1 = reader.utils.sheet_to_json(file.Sheets[file.SheetNames[0]]);
         sheet = JSON.parse(JSON.stringify(sheet1).replace(/\s(?=\w+":)/g, ""));
         sheet.sort(function (a, b) {
-            if (a.Ligand_11 < b.Ligand_11) {
+            if (a.Ligand_1 < b.Ligand_1) {
                 return -1;
             }
-            if (a.Ligand_11 > b.Ligand_11) {
+            if (a.Ligand_1 > b.Ligand_1) {
                 return 1;
             }
             return 0;
         });
-
-
-        // let tempLigant = "";
-        // for (let j = 1; j < sheets.length; j++) {
-
-        //     if (tempLigant == "") {
-        //         tempLigant = sheet[j].Ligand_11;
-        //         createLegandXml(sheet[j]);
-        //         // console.log("testing1-------->>>>",tempLigant);
-        //     } else if (tempLigant == sheet[j].Ligand_11) {
-        //         // createLegandXml(sheet[j]);
-        //         // console.log("testing2-------->>>>",tempLigant);
-
-        //     } else if (tempLigant != sheet[j].Ligand_11) {
-        //         tempLigant = sheet[j].Ligand_11;
-        //         createLegandXml(sheet[j]);
-        //         // console.log("testing3-------->>>>",tempLigant);
-        //     }
-        //console.log("sheet1==========>", sheet);
+    
         createLegandXml(sheet);
         createTargetXml(sheet);
 
-
         const directoryPath = path.join('./uploads/xmlfiles');
-        // fs.readdir(directoryPath, function (err, files) {
-        //     if (err) {
-        //         return console.log('Unable to scan directory: ' + err);
-        //     }
-        //     files.forEach(function (file) {
-        //         fileArray.push(file);
-        //     });
 
-        // });
-let counter = 0;
+        let counter = 0;
         fs.readdirSync(directoryPath).forEach(file => {
-            console.log("file---------->>>", file);
+            // console.log("file---------->>>", file);
             var data = {};
             // let data: any,
             data.Id = counter,
-            data.filename= file,
-            data.directoryPath= directoryPath,
-            data.filesize="10kb",
-            data.downloadstatus= "downloaded",
-            data.date=new Date()
+                data.filename = file,
+                data.directoryPath = directoryPath,
+                data.filesize = "10kb",
+                data.downloadstatus = "downloaded",
+                data.date = new Date()
             fileArray.push(data);
-            counter = counter +1;
+            counter = counter + 1;
 
         });
-        console.log("    =========================  " + fileArray);
-        // After uploaded List of xml files are shows
-        // fs.readdirSync(folder).forEach(file => {
-        //     console.log("file---------->>>", file);
-        // });
-        // After uploaded file are need to be delete
+        // console.log("    =========================  " + fileArray);
+
         let resultHandler = function (err) {
             if (err) {
                 console.log("unlink failed", err);
@@ -144,209 +113,210 @@ function createLegandXml(sheet) {
     let tempLigand_1 = "";
     var doc = null;
     var XMLcontent = null;
-    for (let j = 1; j < sheet.length; j++) {
+
+    for (let j = 0; j < sheet.length; j++) {
+
 
         let xlData = sheet[j];
-        // console.log("xlData=========>", xlData);
-        if (j > 1) {
-            let xlData1 = sheet[j - 1];
-            tempLigand_1 = (xlData1.Ligand_1);
-            tempLigant = xlData1.Ligand_11;
-        }
+        if (xlData.LINK != "TAN Number") {
 
-        if (orderNumber > 1 && (tempLigand_1 == "" || tempLigand_1 != xlData.Ligand_1)) {
-            //            doc = doc.ele('ligand', { 'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance' }, 
-            //{ 'xsi:noNamespaceSchemaLocation': 'http://ent-ref-dev/xsd/base/bioactivity/5/bioactivity-bmv.xsd' }).txt(xlData.Ligand).up();
-            doc2 = doc.ele('disease');
+            if (j > 0) {
+                let xlData1 = sheet[j - 1];
+                tempLigand_1 = (xlData1.Ligand_1);
+                tempLigant = xlData1.Ligand_11;
+            }
 
-            doc2 = doc2.ele('original-disease-name').txt(disease).up().up()
+            orderNumber = orderNumber + 1;
+            if (orderNumber > 1 && (tempLigand_1 == "" || tempLigand_1 != xlData.Ligand_1)) {
+                //            doc = doc.ele('ligand', { 'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance' }, 
+                //{ 'xsi:noNamespaceSchemaLocation': 'http://ent-ref-dev/xsd/base/bioactivity/5/bioactivity-bmv.xsd' }).txt(xlData.Ligand).up();
+                doc2 = doc.ele('disease');
 
-            doc = doc.doc();
-            let filePath = "uploads/xmlfiles/" + fileName + ".xml";
-            var xmldoc = doc.toString({ pretty: true });
-            fs.writeFile(filePath, xmldoc, err => { });
+                doc2 = doc2.ele('original-disease-name').txt(disease).up().up()
 
-        }
+                doc = doc.doc();
+                let filePath = "uploads/xmlfiles/" + fileName +"_"+"_"+ orderNumber+ ".xml";
+                var xmldoc = doc.toString({ pretty: true });
+                //console.log("xlData11111=========>",  xmldoc);
+                fs.writeFile(filePath, xmldoc, err => { });
+            }
 
-        orderNumber = orderNumber + 1;
+            // console.log("FLOW IN   1 ") ;
+            // orderNumber = orderNumber + 1;
 
-        if (tempLigand_1 != xlData.Ligand_1) {
+            if (tempLigand_1 != xlData.Ligand_1) {
 
-            // console.log(" tempLigant    =======", tempLigant, "  ROW VALUE", xlData.Ligand_11);
-            if (tempLigant == "" || tempLigant != xlData.Ligand_11) {
+                // console.log(" tempLigant    =======", tempLigant, "  ROW VALUE", xlData.Ligand_11);
+                if (tempLigant == "" || tempLigant != xlData.Ligand_11) {
 
-                if (tempLigand_1 == "" || tempLigand_1 != xlData.Ligand_1) {
-                    doc = create("ligand")
+                    if (tempLigand_1 == "" || tempLigand_1 != xlData.Ligand_1) {
+                        doc = create("ligand")
 
-                    doc.att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-                    doc.att('xsi:noNamespaceSchemaLocation', 'http://ent-ref-dev/xsd/base/bioactivity/5/bioactivity-bmv.xsd');
-                    let Ligand1 = xlData.Ligand ? xlData.Ligand.split('">')[0] : "";
-                    let LigandText1 = xlData.Ligand ? xlData.Ligand.split('">')[1] : "";
-                    doc = doc.ele('ligand-uri', { 'ligand-record-id': Ligand1 }).txt(LigandText1).up();
+                        doc.att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+                        doc.att('xsi:noNamespaceSchemaLocation', 'http://ent-ref-dev/xsd/base/bioactivity/5/bioactivity-bmv.xsd');
+                        let Ligand1 = xlData.Ligand ? xlData.Ligand.split('">')[0] : "";
+                        let LigandText1 = xlData.Ligand ? xlData.Ligand.split('">')[1] : "";
+                        doc = doc.ele('ligand-uri', { 'ligand-record-id': Ligand1 }).txt(LigandText1).up();
+                        if (xlData.Ligand_1 != "" && xlData.Ligand_1 != "NA")
+                            doc = doc.ele('ligand-version').txt(xlData.Ligand_1).up();
 
+                        if (xlData.Ligand_2 != "" && xlData.Ligand_2 != "NA")
+                            doc = doc.ele('ligand-status').txt(xlData.Ligand_2).up();
 
-
-
-                    if (xlData.Ligand_1 != "" && xlData.Ligand_1 != "NA")
-                        doc = doc.ele('ligand-version').txt(xlData.Ligand_1).up();
-
-                    if (xlData.Ligand_2 != "" && xlData.Ligand_2 != "NA")
-                        doc = doc.ele('ligand-status').txt(xlData.Ligand_2).up();
-
-                    if (xlData.Ligand_3 != "" && xlData.Ligand_3 != "NA")
-                        doc = doc.ele('collection').txt(xlData.Ligand_3).up();
-
-
-                    if (xlData.Ligand_4 != "" && xlData.Ligand_4 != "NA")
+                        if (xlData.Ligand_3 != "" && xlData.Ligand_3 != "NA")
+                            doc = doc.ele('collection').txt(xlData.Ligand_3).up();
 
 
-                        if (xlData.Ligand_5 != "" && xlData.Ligand_5 != "NA")
-                            doc = doc.ele('ligand-type').txt(xlData.Ligand_5).up();
+                        if (xlData.Ligand_4 != "" && xlData.Ligand_4 != "NA")
 
 
-                    if (xlData.Ligand_7 != "" && xlData.Ligand_7 != "NA")
-                        doc = doc.ele('locator-id').txt(xlData.Ligand_7).up();
-
-                    if (xlData.Ligand_11 != "" && xlData.Ligand_11 != "NA")
-                        doc = doc.ele('locator').txt(xlData.Ligand_11).up();
-
-                    doc = doc.ele('reference');
-                    if (xlData.Reference_1 != "" && xlData.Reference_1 != "NA")
-                        doc = doc.ele('source-type').txt(xlData.Reference_1).up()
-                    if (xlData.Reference_2 != "" && xlData.Reference_2 != "NA")
-                        doc = doc.ele('citation').txt(xlData.Reference_2).up()
-                            .up()
-                    doc = doc.ele('assay')
+                            if (xlData.Ligand_5 != "" && xlData.Ligand_5 != "NA")
+                                doc = doc.ele('ligand-type').txt(xlData.Ligand_5).up();
 
 
-                    if (xlData.Assay != "" && xlData.Assay != "NA")
-                        doc = doc.ele('ordinal').txt(xlData.Assay).up()
+                        if (xlData.Ligand_7 != "" && xlData.Ligand_7 != "NA")
+                            doc = doc.ele('locator-id').txt(xlData.Ligand_7).up();
 
-                    if (xlData.Assay_1 != "" && xlData.Assay_1 != "NA")
-                        doc = doc.ele('collection-id').txt(xlData.Assay_1).up()
+                        if (xlData.Ligand_11 != "" && xlData.Ligand_11 != "NA")
+                            doc = doc.ele('locator').txt(xlData.Ligand_11).up();
 
-                    if (xlData.Assay_2 != "" && xlData.Assay_2 != "NA")
-                        doc = doc.ele('assay-type').txt(xlData.Assay_2).up()
-
-                    // console.log("  TOX    " + xlData.Assay_4);
-
-                    // .ele('procedure').txt('Hexokinase-II enzyme activity assay').up()
-
-                    // .ele('procedure').txt('Hexokinase-II enzyme activity assay').up()
-                    let target0 = xlData.Ligand ? xlData.Ligand.split('">')[0] : "";
-                    let target3 = target0 ? target0.split('/')[2] : "";
-                    let targetText = xlData.Ligand ? xlData.Ligand.split('">')[1] : "";
-                    let targetText1 = targetText ? targetText.split('ligand/')[1] : "";
-
-                    // console.log("TORGET CONTENT " + targetText);
-                    // console.log("TORGET CONTENT1 " + targetText1);
-                    // console.log("targetTexttargetTexttargetTexttargetText", target3 + "." + targetText1);
-                    fileName = 'biocur' + '.' + target3 + "." + targetText1;
+                        doc = doc.ele('reference');
+                        if (xlData.Reference_1 != "" && xlData.Reference_1 != "NA")
+                            doc = doc.ele('source-type').txt(xlData.Reference_1).up()
+                        if (xlData.Reference_2 != "" && xlData.Reference_2 != "NA")
+                            doc = doc.ele('citation').txt(xlData.Reference_2).up()
+                                .up()
+                        doc = doc.ele('assay')
 
 
-                    //                   console.log(" xlData.Measurement_1 "   ,  xlData.Measurement_1 );
-                    if (xlData.Measurement_1 != "" && xlData.Measurement_1 != "NA" && xlData.Measurement_1 == "TOX")
-                        doc = doc.ele('Toxicity-type').txt(xlData.Assay_4).up()
+                        if (xlData.Assay != "" && xlData.Assay != "NA")
+                            doc = doc.ele('ordinal').txt(xlData.Assay).up()
 
-                    if (xlData.Reference_2 != "" && xlData.Reference_2 != "NA")
-                        doc = doc.ele('target-uri', { 'target-record-id': target0 }).txt(targetText).up()
+                        if (xlData.Assay_1 != "" && xlData.Assay_1 != "NA")
+                            doc = doc.ele('collection-id').txt(xlData.Assay_1).up()
 
-                    doc = doc.ele('measurement')
+                        if (xlData.Assay_2 != "" && xlData.Assay_2 != "NA")
+                            doc = doc.ele('assay-type').txt(xlData.Assay_2).up()
 
-                    if (xlData.Measurement != "" && xlData.Measurement != "NA")
-                        doc = doc.ele('data-locator').txt(xlData.Measurement).up()
+                        // console.log("  TOX    " + xlData.Assay_4);
 
-                    if (xlData.Measurement_1 != "" && xlData.Measurement_1 != "NA")
-                        doc = doc.ele('category').txt(xlData.Measurement_1).up()
+                        // .ele('procedure').txt('Hexokinase-II enzyme activity assay').up()
 
-                    if (xlData.Measurement_2 != "" && xlData.Measurement_2 != "NA")
-                        doc = doc.ele('function').txt(xlData.Measurement_2).up()
+                        // .ele('procedure').txt('Hexokinase-II enzyme activity assay').up()
+                        let target0 = xlData.Ligand ? xlData.Ligand.split('">')[0] : "";
+                        let target3 = target0 ? target0.split('/')[2] : "";
+                        let targetText = xlData.Ligand ? xlData.Ligand.split('">')[1] : "";
+                        let targetText1 = targetText ? targetText.split('ligand/')[1] : "";
 
-                    if (xlData.Measurement_4 != "" && xlData.Measurement_4 != "NA")
-                        doc = doc.ele('parameter').txt(xlData.Measurement_4).up()
+                        // console.log("TORGET CONTENT " + targetText);
+                        // console.log("TORGET CONTENT1 " + targetText1);
+                        // console.log("targetTexttargetTexttargetTexttargetText", target3 + "." + targetText1);
+                        fileName = 'biocur' + '.' + target3 + "." + targetText1;
 
-                    if (xlData.Measurement_6 != "" && xlData.Measurement_6 != "NA")
-                        doc = doc.ele('original-prefix').txt(xlData.Measurement_6).up()
+                        //                   console.log(" xlData.Measurement_1 "   ,  xlData.Measurement_1 );
+                        if (xlData.Measurement_1 != "" && xlData.Measurement_1 != "NA" && xlData.Measurement_1 == "TOX")
+                            doc = doc.ele('Toxicity-type').txt(xlData.Assay_4).up()
 
-                    if (xlData.Measurement_7 != "NA" || xlData.Measurement_8 != "NA") {
-                        doc = doc.ele('original-value')
+                        if (xlData.Reference_2 != "" && xlData.Reference_2 != "NA")
+                            doc = doc.ele('target-uri', { 'target-record-id': target0 }).txt(targetText).up()
 
+                        doc = doc.ele('measurement')
+
+                        if (xlData.Measurement != "" && xlData.Measurement != "NA")
+                            doc = doc.ele('data-locator').txt(xlData.Measurement).up()
+
+                        if (xlData.Measurement_1 != "" && xlData.Measurement_1 != "NA")
+                            doc = doc.ele('category').txt(xlData.Measurement_1).up()
+
+                        if (xlData.Measurement_2 != "" && xlData.Measurement_2 != "NA")
+                            doc = doc.ele('function').txt(xlData.Measurement_2).up()
+
+                        if (xlData.Measurement_4 != "" && xlData.Measurement_4 != "NA")
+                            doc = doc.ele('parameter').txt(xlData.Measurement_4).up()
+
+                        if (xlData.Measurement_6 != "" && xlData.Measurement_6 != "NA")
+                            doc = doc.ele('original-prefix').txt(xlData.Measurement_6).up()
+
+                        if (xlData.Measurement_7 != "NA" || xlData.Measurement_8 != "NA") {
+                            doc = doc.ele('original-value')
+
+                        }
+
+                        if (xlData.Measurement_7 != "" && xlData.Measurement_7 != "NA")
+                            doc = doc.ele('single-value').txt(xlData.Measurement_7).up()
+
+                        if (xlData.Measurement_8 != "" && xlData.Measurement_8 != "NA")
+                            doc = doc.ele('unit').txt(xlData.Measurement_8).up()
+                                .up()
+                                .up()
+
+                        if (xlData.Biologicalsystem != "NA" || xlData.Biologicalsystem != "NA") {
+                            doc = doc.ele('biological-system')
+
+                        }
+
+                        if (xlData.Biologicalsystem != "" && xlData.Biologicalsystem != "NA")
+                            doc = doc.ele('type').txt(xlData.Biologicalsystem).up()
+
+                        if (xlData.Biologicalsystem_1 != "" && xlData.Biologicalsystem_1 != "NA")
+                            doc = doc.ele('cell').txt(xlData.Biologicalsystem_1).up()
+                                .up()
+                                .up()
+
+
+                        disease = xlData.Disease_1;
+                        // console.log(" tempLigand_1 -----------ifffff->>>>>", tempLigand_1)
                     }
-
-                    if (xlData.Measurement_7 != "" && xlData.Measurement_7 != "NA")
-                        doc = doc.ele('single-value').txt(xlData.Measurement_7).up()
-
-                    if (xlData.Measurement_8 != "" && xlData.Measurement_8 != "NA")
-                        doc = doc.ele('unit').txt(xlData.Measurement_8).up()
-                            .up()
-                            .up()
-
-                    if (xlData.Biologicalsystem != "NA" || xlData.Biologicalsystem != "NA") {
-                        doc = doc.ele('biological-system')
-
-                    }
-
-                    if (xlData.Biologicalsystem != "" && xlData.Biologicalsystem != "NA")
-                        doc = doc.ele('type').txt(xlData.Biologicalsystem).up()
-
-                    if (xlData.Biologicalsystem_1 != "" && xlData.Biologicalsystem_1 != "NA")
-                        doc = doc.ele('cell').txt(xlData.Biologicalsystem_1).up()
-                            .up()
-                            .up()
-
-
-                    disease = xlData.Disease_1;
-                    // console.log(" tempLigand_1 -----------ifffff->>>>>", tempLigand_1)
                 }
+            } else {
+                doc1 = doc.ele('assay');
+
+                if (xlData.Assay != "" && xlData.Assay != "NA")
+                    doc1 = doc1.ele('ordinal').txt(xlData.Assay).up()
+
+                if (xlData.Assay_1 != "" && xlData.Assay_1 != "NA")
+                    doc1 = doc1.ele('collection-id').txt(xlData.Assay_1).up()
+
+                //   console.log(" xlData.Measurement_1 "   ,  xlData.Measurement_1 );
+                if (xlData.Measurement_1 != "" && xlData.Measurement_1 != "NA" && xlData.Measurement_1 == "TOX")
+                    doc = doc.ele('Toxicity-type').txt(xlData.Assay_4).up()
+
+                if (xlData.Assay_2 != "" && xlData.Assay_2 != "NA")
+                    doc1 = doc1.ele('assay-type').txt(xlData.Assay_2).up()
+
+                if (xlData.Reference_2 != "" && xlData.Reference_2 != "NA")
+                    doc1 = doc1.ele('target-uri', { 'target-record-id': 'bioactivity-target/*partner*/46549519P/1/1' }).txt(xlData.Target).up()
+
+                doc1 = doc1.ele('measurement')
+
+                if (xlData.Measurement != "" && xlData.Measurement != "NA")
+                    doc1 = doc1.ele('data-locator').txt(xlData.Measurement).up()
+
+                if (xlData.Measurement_1 != "" && xlData.Measurement_1 != "NA")
+                    doc1 = doc1.ele('category').txt(xlData.Measurement_1).up()
+
+                if (xlData.Measurement_2 != "" && xlData.Measurement_2 != "NA")
+                    doc1 = doc1.ele('function').txt(xlData.Measurement_2).up()
+
+                if (xlData.Measurement_4 != "" && xlData.Measurement_4 != "NA")
+                    doc1 = doc1.ele('parameter').txt(xlData.Measurement_4).up()
+
+                if (xlData.Measurement_6 != "" && xlData.Measurement_6 != "NA")
+                    doc1 = doc1.ele('original-prefix').txt(xlData.Measurement_6).up()
+
+                if (xlData.Measurement_7 != "NA" || xlData.Measurement_8 != "NA") {
+                    doc1 = doc1.ele('original-value')
+                }
+
+                if (xlData.Measurement_7 != "" && xlData.Measurement_7 != "NA")
+                    doc1 = doc1.ele('single-value').txt(xlData.Measurement_7).up()
+
+                if (xlData.Measurement_8 != "" && xlData.Measurement_8 != "NA")
+                    doc1 = doc1.ele('unit').txt(xlData.Measurement_8).up()
+                        .up()
+                        .up()
+
             }
-        } else {
-            doc1 = doc.ele('assay');
-
-            if (xlData.Assay != "" && xlData.Assay != "NA")
-                doc1 = doc1.ele('ordinal').txt(xlData.Assay).up()
-
-            if (xlData.Assay_1 != "" && xlData.Assay_1 != "NA")
-                doc1 = doc1.ele('collection-id').txt(xlData.Assay_1).up()
-
-            //   console.log(" xlData.Measurement_1 "   ,  xlData.Measurement_1 );
-            if (xlData.Measurement_1 != "" && xlData.Measurement_1 != "NA" && xlData.Measurement_1 == "TOX")
-                doc = doc.ele('Toxicity-type').txt(xlData.Assay_4).up()
-
-            if (xlData.Assay_2 != "" && xlData.Assay_2 != "NA")
-                doc1 = doc1.ele('assay-type').txt(xlData.Assay_2).up()
-
-            if (xlData.Reference_2 != "" && xlData.Reference_2 != "NA")
-                doc1 = doc1.ele('target-uri', { 'target-record-id': 'bioactivity-target/*partner*/46549519P/1/1' }).txt(xlData.Target).up()
-
-            doc1 = doc1.ele('measurement')
-
-            if (xlData.Measurement != "" && xlData.Measurement != "NA")
-                doc1 = doc1.ele('data-locator').txt(xlData.Measurement).up()
-
-            if (xlData.Measurement_1 != "" && xlData.Measurement_1 != "NA")
-                doc1 = doc1.ele('category').txt(xlData.Measurement_1).up()
-
-            if (xlData.Measurement_2 != "" && xlData.Measurement_2 != "NA")
-                doc1 = doc1.ele('function').txt(xlData.Measurement_2).up()
-
-            if (xlData.Measurement_4 != "" && xlData.Measurement_4 != "NA")
-                doc1 = doc1.ele('parameter').txt(xlData.Measurement_4).up()
-
-            if (xlData.Measurement_6 != "" && xlData.Measurement_6 != "NA")
-                doc1 = doc1.ele('original-prefix').txt(xlData.Measurement_6).up()
-
-            if (xlData.Measurement_7 != "NA" || xlData.Measurement_8 != "NA") {
-                doc1 = doc1.ele('original-value')
-            }
-
-            if (xlData.Measurement_7 != "" && xlData.Measurement_7 != "NA")
-                doc1 = doc1.ele('single-value').txt(xlData.Measurement_7).up()
-
-            if (xlData.Measurement_8 != "" && xlData.Measurement_8 != "NA")
-                doc1 = doc1.ele('unit').txt(xlData.Measurement_8).up()
-                    .up()
-                    .up()
-
         }
 
 
@@ -359,7 +329,7 @@ function createLegandXml(sheet) {
 
     doc.att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
     doc = doc.doc();
-    let filePath = "uploads/xmlfiles/" + fileName + ".xml";
+    let filePath = "uploads/xmlfiles/" + fileName +"_"+"_"+ orderNumber+ ".xml";
     var xmldoc = doc.toString({ pretty: true });
     fs.writeFile(filePath, xmldoc, err => { });
 
@@ -384,82 +354,73 @@ function createTargetXml(sheet) {
     var document = null;
     let orderNumber = 0;
 
-    for (let j = 1; j < sheet.length; j++) {
+
+    for (let j = 0; j < sheet.length; j++) {
         orderNumber = orderNumber + 1;
         let data = sheet[j];
-        // console.log("xml ", data)
-        let targetid = data.Target ? data.Target.split('">')[0] : "";
-        // console.log(targetid);
-        let targetTexts = data.Target ? data.Target.split('">')[1] : "";
-        // console.log(targetTexts);
-        document = create("target")
 
-        document = document.ele('target-uri', { 'target-record-id': targetid }).txt(targetTexts).up()
+        if (data.LINK != "TAN Number") {
+            // console.log("xml ", data)
+            let targetid = data.Target ? data.Target.split('">')[0] : "";
+            // console.log(targetid);
+            let targetTexts = data.Target ? data.Target.split('">')[1] : "";
+            // console.log(targetTexts);
+            document = create("target")
 
-        if (data.Target_1 != "" && data.Target_1 != "NA")
-            document = document.ele('target-version').txt(data.Target_1).up()
+            document = document.ele('target-uri', { 'target-record-id': targetid }).txt(targetTexts).up()
 
-        if (data.Target_2 != "" && data.Target_2 != "NA")
-            document = document.ele('target-status').txt(data.Target_2).up()
+            if (data.Target_1 != "" && data.Target_1 != "NA")
+                document = document.ele('target-version').txt(data.Target_1).up()
 
-        if (data.Target_3 != "" && data.Target_3 != "NA")
-            document = document.ele('collection-id').txt(data.Target_3).up()
+            if (data.Target_2 != "" && data.Target_2 != "NA")
+                document = document.ele('target-status').txt(data.Target_2).up()
 
-        if (data.Target_4 != "" && data.Target_4 != "NA")
-            document = document.ele('original-target-name').txt(data.Target_4).up()
+            if (data.Target_3 != "" && data.Target_3 != "NA")
+                document = document.ele('collection-id').txt(data.Target_3).up()
 
-        if (data.Target_5 != "" && data.Target_5 != "NA")
-            document = document.ele('acronym').txt(data.Target_5).up()
+            if (data.Target_4 != "" && data.Target_4 != "NA")
+                document = document.ele('original-target-name').txt(data.Target_4).up()
 
-        if (data.Target_6 != "" && data.Target_6 != "NA")
-            document = document.ele('organism-source').txt(data.Target_6).up()
+            if (data.Target_5 != "" && data.Target_5 != "NA")
+                document = document.ele('acronym').txt(data.Target_5).up()
 
-        if (data.Target_7 != "" && data.Target_7 != "NA")
-            document = document.ele('Variant').txt(data.Target_7).up()
+            if (data.Target_6 != "" && data.Target_6 != "NA")
+                document = document.ele('organism-source').txt(data.Target_6).up()
 
-        if (data.Target_8 != "" && data.Target_8 != "NA")
-            document = document.ele('Standard-name').txt(data.Target_8).up()
+            if (data.Target_7 != "" && data.Target_7 != "NA")
+                document = document.ele('Variant').txt(data.Target_7).up()
 
-        if (data.Target_9 != "" && data.Target_9 != "NA")
-            document = document.ele('Common-name').txt(data.Target_9).up()
+            if (data.Target_8 != "" && data.Target_8 != "NA")
+                document = document.ele('Standard-name').txt(data.Target_8).up()
 
-        if (data.Target_10 != "" && data.Target_10 != "NA")
-            document = document.ele('Display-name').txt(data.Target_10).up()
+            if (data.Target_9 != "" && data.Target_9 != "NA")
+                document = document.ele('Common-name').txt(data.Target_9).up()
 
-        if (data.Target_11 != "" && data.Target_11 != "NA")
-            document = document.ele('CLIENT-preferred-name').txt(data.Target_11).up()
+            if (data.Target_10 != "" && data.Target_10 != "NA")
+                document = document.ele('Display-name').txt(data.Target_10).up()
 
-        document = document.doc();
+            if (data.Target_11 != "" && data.Target_11 != "NA")
+                document = document.ele('CLIENT-preferred-name').txt(data.Target_11).up()
+
+            document = document.doc();
 
 
-        let target0 = data.Target ? data.Target.split('">')[0] : "";
-        let target3 = target0 ? target0.split('/')[2] : "";
-        let targetText = data.Target ? data.Target.split('">')[1] : "";
-        let targetText1 = targetText ? targetText.split('target/')[1] : "";
+            let target0 = data.Target ? data.Target.split('">')[0] : "";
+            let target3 = target0 ? target0.split('/')[2] : "";
+            let targetText = data.Target ? data.Target.split('">')[1] : "";
+            let targetText1 = targetText ? targetText.split('target/')[1] : "";
 
-        TargetfileName = 'biocur' + '.' + target3 + '.' + targetText1;
+            TargetfileName = 'biocur' + '.' + target3 + '.' + targetText1;
 
-        let filePath = "uploads/xmlfiles/" + TargetfileName + ".xml";
-        var xml = document.toString({ pretty: true });
-        fs.writeFile(filePath, xml, function (err) {
-            if (err) { return console.log(err); }
-
-        });
-
+            let filePath = "uploads/xmlfiles/" + TargetfileName +"_"+ orderNumber+".xml";
+            var xml = document.toString({ pretty: true });
+            fs.writeFile(filePath, xml, function (err) {
+                if (err) { return console.log(err); }
+            });
+            
+        }
     }
-    //  convert the XML tree to string
-
-    // res.on("end", function () {
-    //     var body = Buffer.concat(doc);
-    //     console.log(body.toString());
-    //     // Return data to client          
-    //     serverRes.send(body.toString());
-
-    //     console.log("body.toString()") body.toString();
-    //   });
-
 }
-
 
 app.listen(PORT, function () {
     console.log('App listening on port ' + PORT);
