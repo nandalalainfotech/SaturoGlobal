@@ -24,24 +24,11 @@ export class IconRendererComponent implements ICellRendererAngularComp {
 
 
     agInit(params: any): void {
-        // console.log("params", params)
-        // console.log("called--->ion", params);
-        // this.authManager.currentUserSubject.subscribe((object: any) => {
-        //     let rgb = Utils.hexToRgb(object.theme);
-        //     this.colorthemes_1 = Utils.rgbToHex(rgb, -0.3);
-
-        //     this.colorthemes_2 = Utils.rgbToHex(rgb, 0.1);
-
-        //     this.colorthemes_3 = Utils.rgbToHex(rgb, 0.5);
-
-        //     this.colorthemes_4 = Utils.rgbToHex(rgb, 0.8);
-        // }
-        // );
+     
         this.params = params;
         this.label = this.params.label;
 
         this.downloadUrl = this.downloadUrl + this.params.data.filename;
-        // console.log("download", this.downloadUrl)
     }
 
     refresh(params?: any): boolean {
@@ -63,8 +50,6 @@ export class IconRendererComponent implements ICellRendererAngularComp {
     
     download() {
         console.log("path", this.downloadUrl);
-        // FileSaver.saveAs(this.downloadUrl);
-        // window.open(this.downloadUrl);
         saveAs( this.downloadUrl);
     }
 }

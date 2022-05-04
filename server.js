@@ -14,7 +14,11 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(compression());
-app.use(express.static(__dirname + '/public/dist/saturoglobal'));
+
+console.log("__dirname",__dirname)
+app.use(express.static(path.join(__dirname + '/public/dist/saturoglobal')));
+// app.use(express.static(path.join(__dirname + '/ag-grid-community/dist/styles')));
+
 var PORT = process.env.PORT || 8000;
 const folder = './uploads/';
 var orderNumber = 0;
@@ -40,15 +44,8 @@ var storage = multer.diskStorage({
 
 
 app.get('/uploads/xmlfiles/:originalfilename', function (req, res, next) {
-    // console.log(req);
-    var filePath = path.join(`./uploads/xmlfiles/`);
+    var filePath = path.join(__dirname + `/uploads/xmlfiles/`) + req.params.originalfilename;
     const filestream = fs.createReadStream(filePath);
-    child_process.execSync(`zip -r archive *`, {
-        cwd: filePath
-    });
-
-    // zip archive of your folder is ready to download
-    //   res.download(filePath + '/archive.zip');
     filestream.pipe(res);
 });
 
