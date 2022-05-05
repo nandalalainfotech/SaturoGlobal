@@ -75,7 +75,7 @@ app.post('/upload', function (req, res, next) {
 
 function createXmlFolder(req, res, sheet) {
     let folderName = "";
-    for(let k = 0; k < sheet.length; k++) {
+    for (let k = 0; k < sheet.length; k++) {
         let data = sheet[k];
         if (data.LINK != "TAN Number") {
             folderName = data.LINK;
@@ -83,7 +83,7 @@ function createXmlFolder(req, res, sheet) {
         }
     }
     fs.exists(path.join(__dirname + "/uploads/xmlfiles/", folderName), exists => {
-        if(!exists) {
+        if (!exists) {
             fs.mkdir(path.join(__dirname + "/uploads/xmlfiles/", folderName), (err) => {
                 createLegandXml(req, res, sheet, folderName);
             });
@@ -103,7 +103,7 @@ function createLegandXml(req, res, sheet, folderName) {
     let xlDataLINK = "";
     for (let j = 0; j < sheet.length; j++) {
         let xlData = sheet[j];
-        
+
         if (xlData.LINK != "TAN Number") {
             try {
                 xlDataLINK = xlData.LINK;
@@ -125,8 +125,8 @@ function createLegandXml(req, res, sheet, folderName) {
 
                     let filePath = "uploads/xmlfiles/" + folderName + "/" + fileName + "_" + "_" + orderNumber + ".xml";
                     var xmldoc = doc.toString({ pretty: true });
-                    fs.writeFile(filePath, xmldoc, err => { 
-                        console.log("error in file writting ",err);
+                    fs.writeFile(filePath, xmldoc, err => {
+                        console.log("error in file writting ", err);
                     });
                 }
                 if (tempLigand_1 != xlData.Ligand_1) {
@@ -191,10 +191,10 @@ function createLegandXml(req, res, sheet, folderName) {
                             if (xlData.Assay_2 != undefined && xlData.Assay_2 != "NA") {
                                 doc = doc.ele('assay-type').txt(xlData.Assay_2).up()
                             }
-                            
-                            
+
+
                             let Ligand0 = xlData.Ligand ? xlData.Target.split('">')[0] ? xlData.Ligand.split('">')[0] : "" : "";
-                            
+
                             let Ligand3 = Ligand0 ? Ligand0.split('/')[2] ? Ligand0.split('/')[2] : "" : "";
 
                             let LigandText = xlData.Target ? xlData.Ligand.split('">')[1] ? xlData.Ligand.split('">')[1] : "" : "";
@@ -206,7 +206,7 @@ function createLegandXml(req, res, sheet, folderName) {
                                 let target3 = target0 ? target0.split('/')[2] ? target0.split('/')[2] : "" : "";
                                 let targetText = xlData.Target ? xlData.Target.split('">')[1] ? xlData.Target.split('">')[1] : "" : "";
                                 let targetText1 = targetText ? targetText.split('target/')[1] ? targetText.split('target/')[1] : "" : "";
-    
+
                                 if (xlData.Reference_2 != undefined && xlData.Reference_2 != "NA") {
                                     doc = doc.ele('target-uri', { 'target-record-id': target0 }).txt(targetText).up()
                                 }
@@ -254,11 +254,11 @@ function createLegandXml(req, res, sheet, folderName) {
                             if (xlData.Measurement_13 != undefined && xlData.Measurement_13 != "NA") {
                                 doc = doc.ele('Non-numeric-value').txt(xlData.Measurement_13).up()
                             }
-                            doc.up()
+                            doc = doc.up()
                             if (xlData.Measurement_16 != undefined && xlData.Measurement_16 != "NA") {
                                 doc = doc.ele('Remarks').txt(xlData.Measurement_16).up()
                             }
-                            doc.up().up()
+                            doc = doc.up()
 
                             if (xlData.Biologicalsystem != undefined || xlData.Biologicalsystem != "NA") {
                                 doc = doc.ele('biological-system')
@@ -305,11 +305,13 @@ function createLegandXml(req, res, sheet, folderName) {
                                 doc = doc.ele('Vocabulary-entry-uri').txt(xlData.Biologicalsystem_9).up()
                             }
 
-                            doc.up().up()
+                            doc = doc.up()
+                            doc = doc.up()
                             disease = xlData.Disease_1;
                         }
                     }
-                } else {
+                }
+                else {
                     doc1 = doc.ele('assay');
 
                     if (xlData.Assay != undefined && xlData.Assay != "NA") {
@@ -328,7 +330,7 @@ function createLegandXml(req, res, sheet, folderName) {
                         let target0 = xlData.Target ? xlData.Target.split('">')[0] ? xlData.Target.split('">')[0] : "" : "";
                         let target3 = target0 ? target0.split('/')[2] ? target0.split('/')[2] : "" : "";
                         let targetText = xlData.Target ? xlData.Target.split('">')[1] ? xlData.Target.split('">')[1] : "" : "";
-                        let targetText1 = targetText ? targetText.split('target/')[1] ? targetText.split('target/')[1] : "": "";
+                        let targetText1 = targetText ? targetText.split('target/')[1] ? targetText.split('target/')[1] : "" : "";
 
                         if (xlData.Reference_2 != undefined && xlData.Reference_2 != "NA") {
                             doc1 = doc1.ele('target-uri', { 'target-record-id': target0 }).txt(targetText).up()
@@ -364,13 +366,62 @@ function createLegandXml(req, res, sheet, folderName) {
                         doc1 = doc1.ele('unit').txt(xlData.Measurement_8).up()
                     }
                     if (xlData.Measurement_13 != undefined && xlData.Measurement_13 != "NA") {
-                        doc = doc.ele('Non-numeric-value').txt(xlData.Measurement_13).up()
+                        doc1 = doc1.ele('Non-numeric-value').txt(xlData.Measurement_13).up()
                     }
-                    doc.up()
+                    doc1 = doc1.up()
                     if (xlData.Measurement_16 != undefined && xlData.Measurement_16 != "NA") {
-                        doc = doc.ele('Remarks').txt(xlData.Measurement_16).up()
+                        doc1 = doc1.ele('Remarks').txt(xlData.Measurement_16).up()
                     }
-                    doc.up().up()
+                  //  doc1 = doc1.up()
+
+                    if (xlData.Biologicalsystem != undefined || xlData.Biologicalsystem != "NA") {
+                        doc1 = doc1.ele('biological-system')
+                    }
+
+                    if (xlData.Biologicalsystem != undefined && xlData.Biologicalsystem != "NA") {
+                        doc1 = doc1.ele('type').txt(xlData.Biologicalsystem).up()
+                    }
+
+                    if (xlData.Biologicalsystem_1 != undefined && xlData.Biologicalsystem_1 != "NA") {
+                        doc1 = doc1.ele('cell').txt(xlData.Biologicalsystem_1).up()
+                    }
+
+                    if (xlData.Biologicalsystem_2 != undefined && xlData.Biologicalsystem_2 != "NA") {
+                        doc1 = doc1.ele('Cell-detail').txt(xlData.Biologicalsystem_2).up()
+                    }
+
+                    if (xlData.Biologicalsystem_3 != undefined && xlData.Biologicalsystem_3 != "NA") {
+                        doc1 = doc1.ele('Organ').txt(xlData.Biologicalsystem_3).up()
+                    }
+
+
+                    if (xlData.Biologicalsystem_4 != undefined && xlData.Biologicalsystem_4 != "NA") {
+                        doc1 = doc1.ele('Organ-detail').txt(xlData.Biologicalsystem_4).up()
+                    }
+
+                    if (xlData.Biologicalsystem_5 != undefined && xlData.Biologicalsystem_5 != "NA") {
+                        doc1 = doc1.ele('Species').txt(xlData.Biologicalsystem_5).up()
+                    }
+
+                    if (doc1.Biologicalsystem_6 != undefined && xlData.Biologicalsystem_6 != "NA") {
+                        doc1 = doc1.ele('Species-detail').txt(xlData.Biologicalsystem_6).up()
+                    }
+
+                    if (xlData.Biologicalsystem_7 != undefined && xlData.Biologicalsystem_7 != "NA") {
+                        doc1 = doc1.ele('Gender').txt(xlData.Biologicalsystem_7).up()
+                    }
+
+                    if (xlData.Biologicalsystem_8 != undefined && xlData.Biologicalsystem_8 != "NA") {
+                        doc1 = doc1.ele('Age-group').txt(xlData.Biologicalsystem_8).up()
+                    }
+
+                    if (xlData.Biologicalsystem_9 != undefined && xlData.Biologicalsystem_9 != "NA") {
+                        doc1 = doc1.ele('Vocabulary-entry-uri').txt(xlData.Biologicalsystem_9).up()
+                    }
+
+                    doc1 = doc1.up()
+                    doc1 = doc1.up()
+
                 }
             } catch (error) {
                 console.log("Exception Occured   ", xlData.Link, "  ", error);
@@ -382,13 +433,13 @@ function createLegandXml(req, res, sheet, folderName) {
 
     doc2 = doc2.ele('original-disease-name').txt(disease).up().up()
     doc = doc.doc();
-    
-    let filePath = "uploads/xmlfiles/"  + folderName + "/" +  fileName + "_" + "_" + orderNumber + ".xml";
+
+    let filePath = "uploads/xmlfiles/" + folderName + "/" + fileName + "_" + "_" + orderNumber + ".xml";
 
     var xmldoc = doc.toString({ pretty: true });
-    fs.writeFile(filePath, xmldoc, err => { 
+    fs.writeFile(filePath, xmldoc, err => {
 
-        console.log("error in file writting ",err);
+        console.log("error in file writting ", err);
 
     });
     createTargetXml(req, res, sheet, folderName);
@@ -456,7 +507,7 @@ function createTargetXml(req, res, sheet, folderName) {
                     let targetText1 = targetText ? targetText.split('target/')[1] ? targetText.split('target/')[1] : "" : "";
 
                     TargetfileName = 'biocur' + '.' + target3 + '.' + targetText1;
-                    
+
 
                     let filePath = "uploads/xmlfiles/" + folderName + "/" + TargetfileName + "_" + orderNumber + ".xml";
                     var xmldoc = document.toString({ pretty: true });
@@ -468,7 +519,7 @@ function createTargetXml(req, res, sheet, folderName) {
             }
         }
     }
-    deleteFolderFiles(req,res);
+    deleteFolderFiles(req, res);
 }
 
 function deleteFolderFiles(req, res) {
