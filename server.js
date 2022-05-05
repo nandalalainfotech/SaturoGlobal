@@ -68,44 +68,12 @@ app.post('/upload', function (req, res, next) {
             }
             return 0;
         });
-
-
-        createXmlFolder(sheet);
-        
-
-        const directoryPath = path.join('./uploads/xmlfiles');
-
-        let counter = 0;
-        fs.readdirSync(directoryPath).forEach(file => {
-            var data = {};
-            data.Id = counter,
-                data.filename = file,
-                data.directoryPath = directoryPath,
-                data.filesize = "10kb",
-                data.downloadstatus = "downloaded",
-                data.date = new Date(),
-                fileArray.push(data);
-            counter = counter + 1;
-
-        });
-
-        let resultHandler = function (err) {
-            if (err) {
-                console.log("unlink failed", err);
-            } else {
-                console.log("file deleted");
-            }
-        }
-        fs.unlink("./uploads/" + req.files[0].filename, resultHandler);
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).send(fileArray);
-
-
+        createXmlFolder(req, res, sheet);
     });
 });
 
 
-function createXmlFolder(sheet) {
+function createXmlFolder(req, res, sheet) {
     let folderName = "";
     for(let k = 0; k < sheet.length; k++) {
         let data = sheet[k];
@@ -117,15 +85,16 @@ function createXmlFolder(sheet) {
     fs.exists(path.join(__dirname + "/uploads/xmlfiles/", folderName), exists => {
         if(!exists) {
             fs.mkdir(path.join(__dirname + "/uploads/xmlfiles/", folderName), (err) => {
-                createLegandXml(sheet, folderName);
+                createLegandXml(req, res, sheet, folderName);
             });
         } else {
-            createLegandXml(sheet, folderName);
+            createLegandXml(req, res, sheet, folderName);
         }
     });
 }
 
-function createLegandXml(sheet, folderName) {
+
+function createLegandXml(req, res, sheet, folderName) {
     let orderNumber = 0;
     let tempLigant = "";
     let tempLigand_1 = "";
@@ -156,7 +125,9 @@ function createLegandXml(sheet, folderName) {
 
                     let filePath = "uploads/xmlfiles/" + folderName + "/" + fileName + "_" + "_" + orderNumber + ".xml";
                     var xmldoc = doc.toString({ pretty: true });
-                    fs.writeFile(filePath, xmldoc, err => { });
+                    fs.writeFile(filePath, xmldoc, err => { 
+                        console.log("error in file writting ",err);
+                    });
                 }
                 if (tempLigand_1 != xlData.Ligand_1) {
 
@@ -220,18 +191,29 @@ function createLegandXml(sheet, folderName) {
                             if (xlData.Assay_2 != undefined && xlData.Assay_2 != "NA") {
                                 doc = doc.ele('assay-type').txt(xlData.Assay_2).up()
                             }
-                            let target0 = xlData.Target ? xlData.Target.split('">')[0] ? xlData.Target.split('">')[0] : "" : "";
-                            let target3 = target0 ? target0.split('/')[2] ? target0.split('/')[2] : "" : "";
-                            let targetText = xlData.Target ? xlData.Target.split('">')[1] ? xlData.Target.split('">')[1] : "" : "";
-                            let targetText1 = targetText ? targetText.split('target/')[1] ? targetText.split('target/')[1] : "" : "";
+                            
+                            
+                            let Ligand0 = xlData.Ligand ? xlData.Target.split('">')[0] ? xlData.Ligand.split('">')[0] : "" : "";
+                            
+                            let Ligand3 = Ligand0 ? Ligand0.split('/')[2] ? Ligand0.split('/')[2] : "" : "";
 
-                            fileName = 'biocur' + '.' + target3 + "." + targetText1;
+                            let LigandText = xlData.Target ? xlData.Ligand.split('">')[1] ? xlData.Ligand.split('">')[1] : "" : "";
+
+                            let LigandText2 = LigandText ? LigandText.split('ligand/')[1] ? LigandText.split('ligand/')[1] : "" : "";
 
                             if (xlData.Target != undefined && xlData.Target != "NA") {
+                                let target0 = xlData.Target ? xlData.Target.split('">')[0] ? xlData.Target.split('">')[0] : "" : "";
+                                let target3 = target0 ? target0.split('/')[2] ? target0.split('/')[2] : "" : "";
+                                let targetText = xlData.Target ? xlData.Target.split('">')[1] ? xlData.Target.split('">')[1] : "" : "";
+                                let targetText1 = targetText ? targetText.split('target/')[1] ? targetText.split('target/')[1] : "" : "";
+    
                                 if (xlData.Reference_2 != undefined && xlData.Reference_2 != "NA") {
                                     doc = doc.ele('target-uri', { 'target-record-id': target0 }).txt(targetText).up()
                                 }
                             }
+
+
+                            fileName = 'biocur' + '.' + Ligand3 + "." + LigandText2;
 
                             if (xlData.Measurement_1 != undefined && xlData.Measurement_1 != "NA" && xlData.Measurement_1 == "TOX") {
                                 doc = doc.ele('Toxicity-type').txt(xlData.Assay_4).up()
@@ -400,16 +382,20 @@ function createLegandXml(sheet, folderName) {
 
     doc2 = doc2.ele('original-disease-name').txt(disease).up().up()
     doc = doc.doc();
-
+    
     let filePath = "uploads/xmlfiles/"  + folderName + "/" +  fileName + "_" + "_" + orderNumber + ".xml";
-    var xmldoc = doc.toString({ pretty: true });
-    fs.writeFile(filePath, xmldoc, err => { });
 
-    createTargetXml(sheet, folderName);
+    var xmldoc = doc.toString({ pretty: true });
+    fs.writeFile(filePath, xmldoc, err => { 
+
+        console.log("error in file writting ",err);
+
+    });
+    createTargetXml(req, res, sheet, folderName);
 }
 
 
-function createTargetXml(sheet, folderName) {
+function createTargetXml(req, res, sheet, folderName) {
     var document = null;
     let orderNumber = 0;
 
@@ -470,6 +456,7 @@ function createTargetXml(sheet, folderName) {
                     let targetText1 = targetText ? targetText.split('target/')[1] ? targetText.split('target/')[1] : "" : "";
 
                     TargetfileName = 'biocur' + '.' + target3 + '.' + targetText1;
+                    
 
                     let filePath = "uploads/xmlfiles/" + folderName + "/" + TargetfileName + "_" + orderNumber + ".xml";
                     var xmldoc = document.toString({ pretty: true });
@@ -481,7 +468,39 @@ function createTargetXml(sheet, folderName) {
             }
         }
     }
+    deleteFolderFiles(req,res);
 }
+
+function deleteFolderFiles(req, res) {
+    const directoryPath = path.join('./uploads/xmlfiles');
+
+    let counter = 0;
+    fs.readdirSync(directoryPath).forEach(file => {
+        var data = {};
+        data.Id = counter,
+            data.filename = file,
+            data.directoryPath = directoryPath,
+            data.filesize = "10kb",
+            data.downloadstatus = "downloaded",
+            data.date = new Date(),
+            fileArray.push(data);
+        counter = counter + 1;
+
+    });
+
+    let resultHandler = function (err) {
+        if (err) {
+            console.log("unlink failed", err);
+        } else {
+            console.log("file deleted");
+        }
+    }
+    fs.unlink("./uploads/" + req.files[0].filename, resultHandler);
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).send(fileArray);
+
+}
+
 
 app.listen(PORT, function () {
     console.log('App listening on port ' + PORT);
