@@ -15,7 +15,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(compression());
 
-console.log("__dirname",__dirname)
 app.use(express.static(path.join(__dirname + '/public/dist/saturoglobal')));
 // app.use(express.static(path.join(__dirname + '/ag-grid-community/dist/styles')));
 
@@ -71,17 +70,14 @@ app.post('/upload', function (req, res, next) {
         });
 
 
-        createLegandXml(sheet);
-
-        createTargetXml(sheet);
+        createXmlFolder(sheet);
+        
 
         const directoryPath = path.join('./uploads/xmlfiles');
 
         let counter = 0;
         fs.readdirSync(directoryPath).forEach(file => {
-            // console.log("file---------->>>", file);
             var data = {};
-            // let data: any,
             data.Id = counter,
                 data.filename = file,
                 data.directoryPath = directoryPath,
@@ -92,7 +88,6 @@ app.post('/upload', function (req, res, next) {
             counter = counter + 1;
 
         });
-        // console.log("    =========================  " + fileArray);
 
         let resultHandler = function (err) {
             if (err) {
@@ -107,26 +102,42 @@ app.post('/upload', function (req, res, next) {
 
 
     });
-
-
 });
 
 
+function createXmlFolder(sheet) {
+    let folderName = "";
+    for(let k = 0; k < sheet.length; k++) {
+        let data = sheet[k];
+        if (data.LINK != "TAN Number") {
+            folderName = data.LINK;
+            break;
+        }
+    }
+    fs.exists(path.join(__dirname + "/uploads/xmlfiles/", folderName), exists => {
+        if(!exists) {
+            fs.mkdir(path.join(__dirname + "/uploads/xmlfiles/", folderName), (err) => {
+                createLegandXml(sheet, folderName);
+            });
+        } else {
+            createLegandXml(sheet, folderName);
+        }
+    });
+}
 
-function createLegandXml(sheet) {
+function createLegandXml(sheet, folderName) {
     let orderNumber = 0;
     let tempLigant = "";
     let tempLigand_1 = "";
     var doc = null;
     var XMLcontent = null;
-
+    let xlDataLINK = "";
     for (let j = 0; j < sheet.length; j++) {
-
         let xlData = sheet[j];
+        
         if (xlData.LINK != "TAN Number") {
-
             try {
-
+                xlDataLINK = xlData.LINK;
                 if (j > 0) {
                     let xlData1 = sheet[j - 1];
                     tempLigand_1 = (xlData1.Ligand_1);
@@ -142,7 +153,8 @@ function createLegandXml(sheet) {
                     doc2 = doc.ele('disease');
                     doc2 = doc2.ele('original-disease-name').txt(disease).up().up()
                     doc = doc.doc();
-                    let filePath = "uploads/xmlfiles/" + fileName + "_" + "_" + orderNumber + ".xml";
+
+                    let filePath = "uploads/xmlfiles/" + folderName + "/" + fileName + "_" + "_" + orderNumber + ".xml";
                     var xmldoc = doc.toString({ pretty: true });
                     fs.writeFile(filePath, xmldoc, err => { });
                 }
@@ -153,8 +165,8 @@ function createLegandXml(sheet) {
                             doc = create("ligand")
                             doc.att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
                             doc.att('xsi:noNamespaceSchemaLocation', 'http://ent-ref-dev/xsd/base/bioactivity/5/bioactivity-bmv.xsd');
-                            let Ligand1 = xlData.Ligand ? xlData.Ligand.split('">')[0] : "";
-                            let LigandText1 = xlData.Ligand ? xlData.Ligand.split('">')[1] : "";
+                            let Ligand1 = xlData.Ligand ? xlData.Ligand.split('">')[0] ? xlData.Ligand.split('">')[0] : "" : "";
+                            let LigandText1 = xlData.Ligand ? xlData.Ligand.split('">')[1] ? xlData.Ligand.split('">')[1] : "" : "";
                             doc = doc.ele('ligand-uri', { 'ligand-record-id': Ligand1 }).txt(LigandText1).up();
                             if (xlData.Ligand_1 != undefined && xlData.Ligand_1 != "NA") {
                                 doc = doc.ele('ligand-version').txt(xlData.Ligand_1).up();
@@ -208,10 +220,10 @@ function createLegandXml(sheet) {
                             if (xlData.Assay_2 != undefined && xlData.Assay_2 != "NA") {
                                 doc = doc.ele('assay-type').txt(xlData.Assay_2).up()
                             }
-                            let target0 = xlData.Target ? xlData.Target.split('">')[0] : "";
-                            let target3 = target0 ? target0.split('/')[2] : "";
-                            let targetText = xlData.Target ? xlData.Target.split('">')[1] : "";
-                            let targetText1 = targetText ? targetText.split('target/')[1] : "";
+                            let target0 = xlData.Target ? xlData.Target.split('">')[0] ? xlData.Target.split('">')[0] : "" : "";
+                            let target3 = target0 ? target0.split('/')[2] ? target0.split('/')[2] : "" : "";
+                            let targetText = xlData.Target ? xlData.Target.split('">')[1] ? xlData.Target.split('">')[1] : "" : "";
+                            let targetText1 = targetText ? targetText.split('target/')[1] ? targetText.split('target/')[1] : "" : "";
 
                             fileName = 'biocur' + '.' + target3 + "." + targetText1;
 
@@ -331,10 +343,10 @@ function createLegandXml(sheet) {
                         doc1 = doc1.ele('assay-type').txt(xlData.Assay_2).up()
 
                     if (xlData.Target != undefined && xlData.Target != "NA") {
-                        let target0 = xlData.Target ? xlData.Target.split('">')[0] : "";
-                        let target3 = target0 ? target0.split('/')[2] : "";
-                        let targetText = xlData.Target ? xlData.Target.split('">')[1] : "";
-                        let targetText1 = targetText ? targetText.split('target/')[1] : "";
+                        let target0 = xlData.Target ? xlData.Target.split('">')[0] ? xlData.Target.split('">')[0] : "" : "";
+                        let target3 = target0 ? target0.split('/')[2] ? target0.split('/')[2] : "" : "";
+                        let targetText = xlData.Target ? xlData.Target.split('">')[1] ? xlData.Target.split('">')[1] : "" : "";
+                        let targetText1 = targetText ? targetText.split('target/')[1] ? targetText.split('target/')[1] : "": "";
 
                         if (xlData.Reference_2 != undefined && xlData.Reference_2 != "NA") {
                             doc1 = doc1.ele('target-uri', { 'target-record-id': target0 }).txt(targetText).up()
@@ -386,17 +398,18 @@ function createLegandXml(sheet) {
 
     doc2 = doc.ele('disease');
 
-    doc2 = doc2.ele('original-disease-name').txt(disease).up()
-        .up()
-
+    doc2 = doc2.ele('original-disease-name').txt(disease).up().up()
     doc = doc.doc();
-    let filePath = "uploads/xmlfiles/" + fileName + "_" + "_" + orderNumber + ".xml";
+
+    let filePath = "uploads/xmlfiles/"  + folderName + "/" +  fileName + "_" + "_" + orderNumber + ".xml";
     var xmldoc = doc.toString({ pretty: true });
     fs.writeFile(filePath, xmldoc, err => { });
+
+    createTargetXml(sheet, folderName);
 }
 
 
-function createTargetXml(sheet) {
+function createTargetXml(sheet, folderName) {
     var document = null;
     let orderNumber = 0;
 
@@ -408,8 +421,8 @@ function createTargetXml(sheet) {
         if (data.Target != undefined && data.Target != "NA") {
             if (data.LINK != "TAN Number") {
                 try {
-                    let targetid = data.Target ? data.Target.split('">')[0] : "";
-                    let targetTexts = data.Target ? data.Target.split('">')[1] : "";
+                    let targetid = data.Target ? data.Target.split('">')[0] ? data.Target.split('">')[0] : "" : "";
+                    let targetTexts = data.Target ? data.Target.split('">')[1] ? data.Target.split('">')[1] : "" : "";
                     document = create("target")
                     document.att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
                     document.att('xsi:noNamespaceSchemaLocation', 'http://ent-ref-dev/xsd/base/bioactivity/5/bioactivity-bmv.xsd');
@@ -451,18 +464,16 @@ function createTargetXml(sheet) {
                     }
                     document = document.doc();
 
-                    let target0 = data.Target ? data.Target.split('">')[0] : "";
-                    let target3 = target0 ? target0.split('/')[2] : "";
-                    let targetText = data.Target ? data.Target.split('">')[1] : "";
-                    let targetText1 = targetText ? targetText.split('target/')[1] : "";
+                    let target0 = data.Target ? data.Target.split('">')[0] ? data.Target.split('">')[0] : "" : "";
+                    let target3 = target0 ? target0.split('/')[2] ? target0.split('/')[2] : "" : "";
+                    let targetText = data.Target ? data.Target.split('">')[1] ? data.Target.split('">')[1] : "" : "";
+                    let targetText1 = targetText ? targetText.split('target/')[1] ? targetText.split('target/')[1] : "" : "";
 
                     TargetfileName = 'biocur' + '.' + target3 + '.' + targetText1;
 
-                    let filePath = "uploads/xmlfiles/" + TargetfileName + "_" + orderNumber + ".xml";
-                    var xml = document.toString({ pretty: true });
-                    fs.writeFile(filePath, xml, function (err) {
-                        if (err) { return console.log(err); }
-                    });
+                    let filePath = "uploads/xmlfiles/" + folderName + "/" + TargetfileName + "_" + orderNumber + ".xml";
+                    var xmldoc = document.toString({ pretty: true });
+                    fs.writeFile(filePath, xmldoc, err => { if (err) { return console.log(err); } });
                 } catch (error) {
                     console.log("Exception Occured  ", data.Link, "  ", error);
                 }
