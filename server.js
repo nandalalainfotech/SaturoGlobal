@@ -68,6 +68,7 @@ app.post('/upload', function (req, res, next) {
             }
             return 0;
         });
+       
         createXmlFolder(req, res, sheet);
     });
 });
@@ -199,6 +200,26 @@ function createLegandXml(req, res, sheet, folderName) {
                             if (xlData.Assay_6 != undefined && xlData.Assay_6 != "NA") {
                                 doc = doc.ele('route-of-administration').txt(xlData.Assay_6).up()
                             }
+
+
+                            doc = doc.ele('ligand-dose');
+                            if (xlData.Assay_11 != undefined && xlData.Assay_11 != "NA") {
+                                doc = doc.ele('single-value').txt(xlData.Assay_11).up()
+                            }
+                            if (xlData.Assay_12 != undefined && xlData.Assay_12 != "NA") {
+                                doc = doc.ele('unit').txt(xlData.Assay_12).up()
+                            }
+                            if (xlData.Assay_13 != undefined && xlData.Assay_13 != "NA") {
+                                doc = doc.ele('high-end-value').txt(xlData.Assay_13).up()
+                            }
+                            if (xlData.Assay_14 != undefined && xlData.Assay_14 != "NA") {
+                                doc = doc.ele('low-end-value').txt(xlData.Assay_14).up()
+                            }
+                            if (xlData.Assay_15 != undefined && xlData.Assay_15 != "NA") {
+                                doc = doc.ele('unit').txt(xlData.Assay_15).up()
+                            }
+                            doc = doc.up()
+
                             if (xlData.Assay_8 != undefined && xlData.Assay_8 != "NA") {
                                 doc = doc.ele('administration-regimen').txt(xlData.Assay_8).up()
                             }
@@ -227,20 +248,9 @@ function createLegandXml(req, res, sheet, folderName) {
 
                             fileName = 'biocur' + '.' + Ligand3 + "." + LigandText2;
 
-                            if (xlData.Assay_11 != undefined && xlData.Assay_11 != "NA") {
-                                doc = doc.ele('single-value').txt(xlData.Assay_11).up()
-                            }
-                            if (xlData.Assay_12 != undefined && xlData.Assay_12 != "NA") {
-                                doc = doc.ele('unit').txt(xlData.Assay_12).up()
-                            }
-                            if (xlData.Assay_13 != undefined && xlData.Assay_13 != "NA") {
-                                doc = doc.ele('high-end-value').txt(xlData.Assay_13).up()
-                            }
-                            if (xlData.Assay_14 != undefined && xlData.Assay_14 != "NA") {
-                                doc = doc.ele('low-end-value').txt(xlData.Assay_14).up()
-                            }
+                            doc = doc.ele('condition');
                             if (xlData.Assay_16 != undefined && xlData.Assay_16 != "NA") {
-                                doc = doc.ele('condition-Type').txt(xlData.Assay_16).up()
+                                doc = doc.ele('type').txt(xlData.Assay_16).up()
                             }
                             if (xlData.Assay_17 != undefined && xlData.Assay_17 != "NA") {
                                 doc = doc.ele('material').txt(xlData.Assay_17).up()
@@ -248,22 +258,26 @@ function createLegandXml(req, res, sheet, folderName) {
                             if (xlData.Assay_18 != undefined && xlData.Assay_18 != "NA") {
                                 doc = doc.ele('material-id').txt(xlData.Assay_18).up()
                             } 
+                          
+                            doc = doc.ele('value');
                             if (xlData.Assay_20 != undefined && xlData.Assay_20 != "NA") {
-                                doc = doc.ele('single-value1').txt(xlData.Assay_20).up()
+                                doc = doc.ele('single-value').txt(xlData.Assay_20).up()
                             }
                             if (xlData.Assay_21 != undefined && xlData.Assay_21 != "NA") {
-                                doc = doc.ele('unit2').txt(xlData.Assay_21).up()
+                                doc = doc.ele('unit').txt(xlData.Assay_21).up()
                             }
                             if (xlData.Assay_22 != undefined && xlData.Assay_22 != "NA") {
-                                doc = doc.ele('high-end-value1').txt(xlData.Assay_22).up()
+                                doc = doc.ele('high-end-value').txt(xlData.Assay_22).up()
                             }
                             if (xlData.Assay_23 != undefined && xlData.Assay_23 != "NA") {
-                                doc = doc.ele('low-end-value1').txt(xlData.Assay_23).up()
+                                doc = doc.ele('low-end-value').txt(xlData.Assay_23).up()
                             }
                             if (xlData.Assay_24 != undefined && xlData.Assay_24 != "NA") {
-                                doc = doc.ele('unit3').txt(xlData.Assay_24).up()
+                                doc = doc.ele('unit').txt(xlData.Assay_24).up()
                             }
-                           
+                            doc = doc.up()
+                            doc = doc.up()
+
                             doc = doc.ele('measurement')
 
                             if (xlData.Measurement != undefined && xlData.Measurement != "NA") {
@@ -301,6 +315,9 @@ function createLegandXml(req, res, sheet, folderName) {
                             }
                             if (xlData.Measurement_11 != undefined && xlData.Measurement_11 != "NA") {
                                 doc = doc.ele('low-end-value').txt(xlData.Measurement_11).up()
+                            }
+                            if (xlData.Measurement_12 != undefined && xlData.Measurement_12 != "NA") {
+                                doc = doc.ele('unit').txt(xlData.Measurement_12).up()
                             }
                             if (xlData.Measurement_13 != undefined && xlData.Measurement_13 != "NA") {
                                 doc = doc.ele('non-numeric-value').txt(xlData.Measurement_13).up()
@@ -381,6 +398,25 @@ function createLegandXml(req, res, sheet, folderName) {
                     if (xlData.Assay_6 != undefined && xlData.Assay_6 != "NA") {
                         doc1 = doc1.ele('route-of-administration').txt(xlData.Assay_6).up()
                     }
+
+                    doc1 = doc1.ele('ligand-dose');
+                    if (xlData.Assay_11 != undefined && xlData.Assay_11 != "NA") {
+                        doc1 = doc1.ele('single-value').txt(xlData.Assay_11).up()
+                    }
+                    if (xlData.Assay_12 != undefined && xlData.Assay_12 != "NA") {
+                        doc1 = doc1.ele('unit').txt(xlData.Assay_12).up()
+                    }
+                    if (xlData.Assay_13 != undefined && xlData.Assay_13 != "NA") {
+                        doc1 = doc1.ele('high-end-value').txt(xlData.Assay_13).up()
+                    }
+                    if (xlData.Assay_14 != undefined && xlData.Assay_14 != "NA") {
+                        doc1 = doc1.ele('low-end-value').txt(xlData.Assay_14).up()
+                    }
+                    if (xlData.Assay_15 != undefined && xlData.Assay_15 != "NA") {
+                        doc1 = doc1.ele('unit').txt(xlData.Assay_15).up()
+                    }
+                    doc1 = doc1.up()
+                    
                     if (xlData.Assay_8 != undefined && xlData.Assay_8 != "NA") {
                         doc1 = doc1.ele('administration-regimen').txt(xlData.Assay_8).up()
                     }
@@ -398,21 +434,10 @@ function createLegandXml(req, res, sheet, folderName) {
                             doc1 = doc1.ele('target-uri', { 'target-record-id': target0 }).txt(targetText).up()
                         }
                     }
-                    if (xlData.Assay_11 != undefined && xlData.Assay_11 != "NA") {
-                        doc1 = doc1.ele('single-value').txt(xlData.Assay_11).up()
-                    }
-                    if (xlData.Assay_12 != undefined && xlData.Assay_12 != "NA") {
-                        doc1 = doc1.ele('unit').txt(xlData.Assay_12).up()
-                    }
-                    if (xlData.Assay_13 != undefined && xlData.Assay_13 != "NA") {
-                        doc1 = doc1.ele('high-end-value').txt(xlData.Assay_13).up()
-                    }
-                    if (xlData.Assay_14 != undefined && xlData.Assay_14 != "NA") {
-                        doc1 = doc1.ele('low-end-value').txt(xlData.Assay_14).up()
-                    }
-                    
+                 
+                    doc1 = doc1.ele('condition');
                     if (xlData.Assay_16 != undefined && xlData.Assay_16 != "NA") {
-                        doc1 = doc1.ele('condition-Type').txt(xlData.Assay_16).up()
+                        doc1 = doc1.ele('type').txt(xlData.Assay_16).up()
                     }
                     if (xlData.Assay_17 != undefined && xlData.Assay_17 != "NA") {
                         doc1 = doc1.ele('material').txt(xlData.Assay_17).up()
@@ -420,22 +445,25 @@ function createLegandXml(req, res, sheet, folderName) {
                     if (xlData.Assay_18 != undefined && xlData.Assay_18 != "NA") {
                         doc1 = doc1.ele('material-id').txt(xlData.Assay_18).up()
                     } 
+                  
+                    doc1 = doc1.ele('value');
                     if (xlData.Assay_20 != undefined && xlData.Assay_20 != "NA") {
-                        doc1 = doc1.ele('single-value1').txt(xlData.Assay_20).up()
+                        doc1 = doc1.ele('single-value').txt(xlData.Assay_20).up()
                     }
                     if (xlData.Assay_21 != undefined && xlData.Assay_21 != "NA") {
-                        doc1 = doc1.ele('unit2').txt(xlData.Assay_21).up()
+                        doc1 = doc1.ele('unit').txt(xlData.Assay_21).up()
                     }
                     if (xlData.Assay_22 != undefined && xlData.Assay_22 != "NA") {
-                        doc1 = doc1.ele('high-end-value1').txt(xlData.Assay_22).up()
+                        doc1 = doc1.ele('high-end-value').txt(xlData.Assay_22).up()
                     }
                     if (xlData.Assay_23 != undefined && xlData.Assay_23 != "NA") {
-                        doc1 = doc1.ele('low-end-value1').txt(xlData.Assay_23).up()
+                        doc1 = doc1.ele('low-end-value').txt(xlData.Assay_23).up()
                     }
                     if (xlData.Assay_24 != undefined && xlData.Assay_24 != "NA") {
-                        doc1 = doc1.ele('unit3').txt(xlData.Assay_24).up()
+                        doc1 = doc1.ele('unit').txt(xlData.Assay_24).up()
                     }
-                   
+                    doc1 = doc1.up()
+                    doc1 = doc1.up()
                     
                     doc1 = doc1.ele('measurement')
 
@@ -473,6 +501,9 @@ function createLegandXml(req, res, sheet, folderName) {
                     }
                     if (xlData.Measurement_11 != undefined && xlData.Measurement_11 != "NA") {
                         doc1 = doc1.ele('low-end-value').txt(xlData.Measurement_11).up()
+                    }
+                    if (xlData.Measurement_12 != undefined && xlData.Measurement_12 != "NA") {
+                        doc1 = doc1.ele('unit').txt(xlData.Measurement_12).up()
                     }
                     if (xlData.Measurement_13 != undefined && xlData.Measurement_13 != "NA") {
                         doc1 = doc1.ele('non-numeric-value').txt(xlData.Measurement_13).up()
