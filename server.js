@@ -156,13 +156,12 @@ function createLegandXml(req, res, sheet, folderName) {
 
 
                             if (xlData.Ligand_6 != undefined && xlData.Ligand_6 != "NA") {
-                                doc = doc.ele('Collection-name').txt(xlData.Ligand_6).up();
+                                doc = doc.ele('collection-name').txt(xlData.Ligand_6).up();
                             }
 
                             if (xlData.Ligand_7 != undefined && xlData.Ligand_7 != "NA") {
-                                doc = doc.ele('Collection-id').txt(xlData.Ligand_7).up();
+                                doc = doc.ele('collection-id').txt(xlData.Ligand_7).up();
                             }
-
 
                             if (xlData.Ligand_11 != undefined && xlData.Ligand_11 != "NA") {
                                 doc = doc.ele('locator').txt(xlData.Ligand_11).up();
@@ -191,7 +190,21 @@ function createLegandXml(req, res, sheet, folderName) {
                             if (xlData.Assay_2 != undefined && xlData.Assay_2 != "NA") {
                                 doc = doc.ele('assay-type').txt(xlData.Assay_2).up()
                             }
+                            if (xlData.Measurement_1 != undefined && xlData.Measurement_1 != "NA" && xlData.Measurement_1 == "TOX") {
+                                if (xlData.Assay_4 != undefined && xlData.Assay_4 != "NA") {
+                                doc = doc.ele('Toxicity-type').txt(xlData.Assay_4).up()
+                                }
+                            }
 
+                            if (xlData.Assay_6 != undefined && xlData.Assay_6 != "NA") {
+                                doc = doc.ele('route-of-administration').txt(xlData.Assay_6).up()
+                            }
+                            if (xlData.Assay_8 != undefined && xlData.Assay_8 != "NA") {
+                                doc = doc.ele('administration-regimen').txt(xlData.Assay_8).up()
+                            }
+                            if (xlData.Assay_9 != undefined && xlData.Assay_9 != "NA") {
+                                doc = doc.ele('procedure').txt(xlData.Assay_9).up()
+                            }
 
                             let Ligand0 = xlData.Ligand ? xlData.Target.split('">')[0] ? xlData.Ligand.split('">')[0] : "" : "";
 
@@ -212,13 +225,45 @@ function createLegandXml(req, res, sheet, folderName) {
                                 }
                             }
 
-
                             fileName = 'biocur' + '.' + Ligand3 + "." + LigandText2;
 
-                            if (xlData.Measurement_1 != undefined && xlData.Measurement_1 != "NA" && xlData.Measurement_1 == "TOX") {
-                                doc = doc.ele('Toxicity-type').txt(xlData.Assay_4).up()
+                            if (xlData.Assay_11 != undefined && xlData.Assay_11 != "NA") {
+                                doc = doc.ele('single-value').txt(xlData.Assay_11).up()
                             }
-
+                            if (xlData.Assay_12 != undefined && xlData.Assay_12 != "NA") {
+                                doc = doc.ele('unit').txt(xlData.Assay_12).up()
+                            }
+                            if (xlData.Assay_13 != undefined && xlData.Assay_13 != "NA") {
+                                doc = doc.ele('high-end-value').txt(xlData.Assay_13).up()
+                            }
+                            if (xlData.Assay_14 != undefined && xlData.Assay_14 != "NA") {
+                                doc = doc.ele('low-end-value').txt(xlData.Assay_14).up()
+                            }
+                            if (xlData.Assay_16 != undefined && xlData.Assay_16 != "NA") {
+                                doc = doc.ele('condition-Type').txt(xlData.Assay_16).up()
+                            }
+                            if (xlData.Assay_17 != undefined && xlData.Assay_17 != "NA") {
+                                doc = doc.ele('material').txt(xlData.Assay_17).up()
+                            }
+                            if (xlData.Assay_18 != undefined && xlData.Assay_18 != "NA") {
+                                doc = doc.ele('material-id').txt(xlData.Assay_18).up()
+                            } 
+                            if (xlData.Assay_20 != undefined && xlData.Assay_20 != "NA") {
+                                doc = doc.ele('single-value1').txt(xlData.Assay_20).up()
+                            }
+                            if (xlData.Assay_21 != undefined && xlData.Assay_21 != "NA") {
+                                doc = doc.ele('unit2').txt(xlData.Assay_21).up()
+                            }
+                            if (xlData.Assay_22 != undefined && xlData.Assay_22 != "NA") {
+                                doc = doc.ele('high-end-value1').txt(xlData.Assay_22).up()
+                            }
+                            if (xlData.Assay_23 != undefined && xlData.Assay_23 != "NA") {
+                                doc = doc.ele('low-end-value1').txt(xlData.Assay_23).up()
+                            }
+                            if (xlData.Assay_24 != undefined && xlData.Assay_24 != "NA") {
+                                doc = doc.ele('unit3').txt(xlData.Assay_24).up()
+                            }
+                           
                             doc = doc.ele('measurement')
 
                             if (xlData.Measurement != undefined && xlData.Measurement != "NA") {
@@ -236,7 +281,7 @@ function createLegandXml(req, res, sheet, folderName) {
                                 doc = doc.ele('parameter').txt(xlData.Measurement_4).up()
                             }
                             if (xlData.Measurement_5 != undefined && xlData.Measurement_5 != "NA") {
-                                doc = doc.ele('Parameter-detail').txt(xlData.Measurement_5).up()
+                                doc = doc.ele('parameter-detail').txt(xlData.Measurement_5).up()
                             }
                             if (xlData.Measurement_6 != undefined && xlData.Measurement_6 != "NA") {
                                 doc = doc.ele('original-prefix').txt(xlData.Measurement_6).up()
@@ -251,12 +296,18 @@ function createLegandXml(req, res, sheet, folderName) {
                             if (xlData.Measurement_8 != undefined && xlData.Measurement_8 != "NA") {
                                 doc = doc.ele('unit').txt(xlData.Measurement_8).up()
                             }
+                            if (xlData.Measurement_10 != undefined && xlData.Measurement_10 != "NA") {
+                                doc = doc.ele('high-end-value').txt(xlData.Measurement_10).up()
+                            }
+                            if (xlData.Measurement_11 != undefined && xlData.Measurement_11 != "NA") {
+                                doc = doc.ele('low-end-value').txt(xlData.Measurement_11).up()
+                            }
                             if (xlData.Measurement_13 != undefined && xlData.Measurement_13 != "NA") {
-                                doc = doc.ele('Non-numeric-value').txt(xlData.Measurement_13).up()
+                                doc = doc.ele('non-numeric-value').txt(xlData.Measurement_13).up()
                             }
                             doc = doc.up()
                             if (xlData.Measurement_16 != undefined && xlData.Measurement_16 != "NA") {
-                                doc = doc.ele('Remarks').txt(xlData.Measurement_16).up()
+                                doc = doc.ele('remarks').txt(xlData.Measurement_16).up()
                             }
                             doc = doc.up()
 
@@ -273,36 +324,36 @@ function createLegandXml(req, res, sheet, folderName) {
                             }
 
                             if (xlData.Biologicalsystem_2 != undefined && xlData.Biologicalsystem_2 != "NA") {
-                                doc = doc.ele('Cell-detail').txt(xlData.Biologicalsystem_2).up()
+                                doc = doc.ele('cell-detail').txt(xlData.Biologicalsystem_2).up()
                             }
 
                             if (xlData.Biologicalsystem_3 != undefined && xlData.Biologicalsystem_3 != "NA") {
-                                doc = doc.ele('Organ').txt(xlData.Biologicalsystem_3).up()
+                                doc = doc.ele('organ').txt(xlData.Biologicalsystem_3).up()
                             }
 
 
                             if (xlData.Biologicalsystem_4 != undefined && xlData.Biologicalsystem_4 != "NA") {
-                                doc = doc.ele('Organ-detail').txt(xlData.Biologicalsystem_4).up()
+                                doc = doc.ele('organ-detail').txt(xlData.Biologicalsystem_4).up()
                             }
 
                             if (xlData.Biologicalsystem_5 != undefined && xlData.Biologicalsystem_5 != "NA") {
-                                doc = doc.ele('Species').txt(xlData.Biologicalsystem_5).up()
+                                doc = doc.ele('species').txt(xlData.Biologicalsystem_5).up()
                             }
 
                             if (xlData.Biologicalsystem_6 != undefined && xlData.Biologicalsystem_6 != "NA") {
-                                doc = doc.ele('Species-detail').txt(xlData.Biologicalsystem_6).up()
+                                doc = doc.ele('species-detail').txt(xlData.Biologicalsystem_6).up()
                             }
 
                             if (xlData.Biologicalsystem_7 != undefined && xlData.Biologicalsystem_7 != "NA") {
-                                doc = doc.ele('Gender').txt(xlData.Biologicalsystem_7).up()
+                                doc = doc.ele('gender').txt(xlData.Biologicalsystem_7).up()
                             }
 
                             if (xlData.Biologicalsystem_8 != undefined && xlData.Biologicalsystem_8 != "NA") {
-                                doc = doc.ele('Age-group').txt(xlData.Biologicalsystem_8).up()
+                                doc = doc.ele('age-group').txt(xlData.Biologicalsystem_8).up()
                             }
 
                             if (xlData.Biologicalsystem_9 != undefined && xlData.Biologicalsystem_9 != "NA") {
-                                doc = doc.ele('Vocabulary-entry-uri').txt(xlData.Biologicalsystem_9).up()
+                                doc = doc.ele('vocabulary-entry-uri').txt(xlData.Biologicalsystem_9).up()
                             }
 
                             doc = doc.up()
@@ -320,11 +371,22 @@ function createLegandXml(req, res, sheet, folderName) {
                     if (xlData.Assay_1 != undefined && xlData.Assay_1 != "NA") {
                         doc1 = doc1.ele('collection-id').txt(xlData.Assay_1).up()
                     }
-                    if (xlData.Measurement_1 != undefined && xlData.Measurement_1 != "NA" && xlData.Measurement_1 == "TOX") {
-                        doc = doc.ele('Toxicity-type').txt(xlData.Assay_4).up()
-                    }
-                    if (xlData.Assay_2 != undefined && xlData.Assay_2 != "NA")
+                 
+                    if (xlData.Assay_2 != undefined && xlData.Assay_2 != "NA"){
                         doc1 = doc1.ele('assay-type').txt(xlData.Assay_2).up()
+                    }
+                    if (xlData.Measurement_1 != undefined && xlData.Measurement_1 != "NA" && xlData.Measurement_1 == "TOX") {
+                        doc1 = doc1.ele('toxicity-type').txt(xlData.Assay_4).up()
+                    }
+                    if (xlData.Assay_6 != undefined && xlData.Assay_6 != "NA") {
+                        doc1 = doc1.ele('route-of-administration').txt(xlData.Assay_6).up()
+                    }
+                    if (xlData.Assay_8 != undefined && xlData.Assay_8 != "NA") {
+                        doc1 = doc1.ele('administration-regimen').txt(xlData.Assay_8).up()
+                    }
+                    if (xlData.Assay_9 != undefined && xlData.Assay_9 != "NA") {
+                        doc1 = doc1.ele('procedure').txt(xlData.Assay_9).up()
+                    }
 
                     if (xlData.Target != undefined && xlData.Target != "NA") {
                         let target0 = xlData.Target ? xlData.Target.split('">')[0] ? xlData.Target.split('">')[0] : "" : "";
@@ -336,7 +398,45 @@ function createLegandXml(req, res, sheet, folderName) {
                             doc1 = doc1.ele('target-uri', { 'target-record-id': target0 }).txt(targetText).up()
                         }
                     }
-
+                    if (xlData.Assay_11 != undefined && xlData.Assay_11 != "NA") {
+                        doc1 = doc1.ele('single-value').txt(xlData.Assay_11).up()
+                    }
+                    if (xlData.Assay_12 != undefined && xlData.Assay_12 != "NA") {
+                        doc1 = doc1.ele('unit').txt(xlData.Assay_12).up()
+                    }
+                    if (xlData.Assay_13 != undefined && xlData.Assay_13 != "NA") {
+                        doc1 = doc1.ele('high-end-value').txt(xlData.Assay_13).up()
+                    }
+                    if (xlData.Assay_14 != undefined && xlData.Assay_14 != "NA") {
+                        doc1 = doc1.ele('low-end-value').txt(xlData.Assay_14).up()
+                    }
+                    
+                    if (xlData.Assay_16 != undefined && xlData.Assay_16 != "NA") {
+                        doc1 = doc1.ele('condition-Type').txt(xlData.Assay_16).up()
+                    }
+                    if (xlData.Assay_17 != undefined && xlData.Assay_17 != "NA") {
+                        doc1 = doc1.ele('material').txt(xlData.Assay_17).up()
+                    }
+                    if (xlData.Assay_18 != undefined && xlData.Assay_18 != "NA") {
+                        doc1 = doc1.ele('material-id').txt(xlData.Assay_18).up()
+                    } 
+                    if (xlData.Assay_20 != undefined && xlData.Assay_20 != "NA") {
+                        doc1 = doc1.ele('single-value1').txt(xlData.Assay_20).up()
+                    }
+                    if (xlData.Assay_21 != undefined && xlData.Assay_21 != "NA") {
+                        doc1 = doc1.ele('unit2').txt(xlData.Assay_21).up()
+                    }
+                    if (xlData.Assay_22 != undefined && xlData.Assay_22 != "NA") {
+                        doc1 = doc1.ele('high-end-value1').txt(xlData.Assay_22).up()
+                    }
+                    if (xlData.Assay_23 != undefined && xlData.Assay_23 != "NA") {
+                        doc1 = doc1.ele('low-end-value1').txt(xlData.Assay_23).up()
+                    }
+                    if (xlData.Assay_24 != undefined && xlData.Assay_24 != "NA") {
+                        doc1 = doc1.ele('unit3').txt(xlData.Assay_24).up()
+                    }
+                   
+                    
                     doc1 = doc1.ele('measurement')
 
                     if (xlData.Measurement != undefined && xlData.Measurement != "NA") {
@@ -350,6 +450,9 @@ function createLegandXml(req, res, sheet, folderName) {
                     }
                     if (xlData.Measurement_4 != undefined && xlData.Measurement_4 != "NA") {
                         doc1 = doc1.ele('parameter').txt(xlData.Measurement_4).up()
+                    }
+                    if (xlData.Measurement_5 != undefined && xlData.Measurement_5 != "NA") {
+                        doc1 = doc1.ele('parameter-detail').txt(xlData.Measurement_5).up()
                     }
                     if (xlData.Measurement_6 != undefined && xlData.Measurement_6 != "NA") {
                         doc1 = doc1.ele('original-prefix').txt(xlData.Measurement_6).up()
@@ -365,12 +468,18 @@ function createLegandXml(req, res, sheet, folderName) {
                     if (xlData.Measurement_8 != undefined && xlData.Measurement_8 != "NA") {
                         doc1 = doc1.ele('unit').txt(xlData.Measurement_8).up()
                     }
+                    if (xlData.Measurement_10 != undefined && xlData.Measurement_10 != "NA") {
+                        doc1 = doc1.ele('high-end-value').txt(xlData.Measurement_10).up()
+                    }
+                    if (xlData.Measurement_11 != undefined && xlData.Measurement_11 != "NA") {
+                        doc1 = doc1.ele('low-end-value').txt(xlData.Measurement_11).up()
+                    }
                     if (xlData.Measurement_13 != undefined && xlData.Measurement_13 != "NA") {
-                        doc1 = doc1.ele('Non-numeric-value').txt(xlData.Measurement_13).up()
+                        doc1 = doc1.ele('non-numeric-value').txt(xlData.Measurement_13).up()
                     }
                     doc1 = doc1.up()
                     if (xlData.Measurement_16 != undefined && xlData.Measurement_16 != "NA") {
-                        doc1 = doc1.ele('Remarks').txt(xlData.Measurement_16).up()
+                        doc1 = doc1.ele('remarks').txt(xlData.Measurement_16).up()
                     }
                   //  doc1 = doc1.up()
 
@@ -387,36 +496,36 @@ function createLegandXml(req, res, sheet, folderName) {
                     }
 
                     if (xlData.Biologicalsystem_2 != undefined && xlData.Biologicalsystem_2 != "NA") {
-                        doc1 = doc1.ele('Cell-detail').txt(xlData.Biologicalsystem_2).up()
+                        doc1 = doc1.ele('cell-detail').txt(xlData.Biologicalsystem_2).up()
                     }
 
                     if (xlData.Biologicalsystem_3 != undefined && xlData.Biologicalsystem_3 != "NA") {
-                        doc1 = doc1.ele('Organ').txt(xlData.Biologicalsystem_3).up()
+                        doc1 = doc1.ele('organ').txt(xlData.Biologicalsystem_3).up()
                     }
 
 
                     if (xlData.Biologicalsystem_4 != undefined && xlData.Biologicalsystem_4 != "NA") {
-                        doc1 = doc1.ele('Organ-detail').txt(xlData.Biologicalsystem_4).up()
+                        doc1 = doc1.ele('organ-detail').txt(xlData.Biologicalsystem_4).up()
                     }
 
                     if (xlData.Biologicalsystem_5 != undefined && xlData.Biologicalsystem_5 != "NA") {
-                        doc1 = doc1.ele('Species').txt(xlData.Biologicalsystem_5).up()
+                        doc1 = doc1.ele('species').txt(xlData.Biologicalsystem_5).up()
                     }
 
                     if (doc1.Biologicalsystem_6 != undefined && xlData.Biologicalsystem_6 != "NA") {
-                        doc1 = doc1.ele('Species-detail').txt(xlData.Biologicalsystem_6).up()
+                        doc1 = doc1.ele('species-detail').txt(xlData.Biologicalsystem_6).up()
                     }
 
                     if (xlData.Biologicalsystem_7 != undefined && xlData.Biologicalsystem_7 != "NA") {
-                        doc1 = doc1.ele('Gender').txt(xlData.Biologicalsystem_7).up()
+                        doc1 = doc1.ele('gender').txt(xlData.Biologicalsystem_7).up()
                     }
 
                     if (xlData.Biologicalsystem_8 != undefined && xlData.Biologicalsystem_8 != "NA") {
-                        doc1 = doc1.ele('Age-group').txt(xlData.Biologicalsystem_8).up()
+                        doc1 = doc1.ele('age-group').txt(xlData.Biologicalsystem_8).up()
                     }
 
                     if (xlData.Biologicalsystem_9 != undefined && xlData.Biologicalsystem_9 != "NA") {
-                        doc1 = doc1.ele('Vocabulary-entry-uri').txt(xlData.Biologicalsystem_9).up()
+                        doc1 = doc1.ele('vocabulary-entry-uri').txt(xlData.Biologicalsystem_9).up()
                     }
 
                     doc1 = doc1.up()
@@ -449,7 +558,6 @@ function createLegandXml(req, res, sheet, folderName) {
 function createTargetXml(req, res, sheet, folderName) {
     var document = null;
     let orderNumber = 0;
-
 
     for (let j = 0; j < sheet.length; j++) {
         orderNumber = orderNumber + 1;
@@ -485,19 +593,19 @@ function createTargetXml(req, res, sheet, folderName) {
                     }
 
                     if (data.Target_7 != undefined && data.Target_7 != "NA") {
-                        document = document.ele('Variant').txt(data.Target_7).up()
+                        document = document.ele('variant').txt(data.Target_7).up()
                     }
                     if (data.Target_8 != undefined && data.Target_8 != "NA") {
-                        document = document.ele('Standard-name').txt(data.Target_8).up()
+                        document = document.ele('standard-name').txt(data.Target_8).up()
                     }
                     if (data.Target_9 != undefined && data.Target_9 != "NA") {
-                        document = document.ele('Common-name').txt(data.Target_9).up()
+                        document = document.ele('common-name').txt(data.Target_9).up()
                     }
                     if (data.Target_10 != undefined && data.Target_10 != "NA") {
-                        document = document.ele('Display-name').txt(data.Target_10).up()
+                        document = document.ele('display-name').txt(data.Target_10).up()
                     }
                     if (data.Target_11 != undefined && data.Target_11 != "NA") {
-                        document = document.ele('CLIENT-preferred-name').txt(data.Target_11).up()
+                        document = document.ele('client-preferred-name').txt(data.Target_11).up()
                     }
                     document = document.doc();
 
@@ -507,7 +615,6 @@ function createTargetXml(req, res, sheet, folderName) {
                     let targetText1 = targetText ? targetText.split('target/')[1] ? targetText.split('target/')[1] : "" : "";
 
                     TargetfileName = 'biocur' + '.' + target3 + '.' + targetText1;
-
 
                     let filePath = "uploads/xmlfiles/" + folderName + "/" + TargetfileName + "_" + orderNumber + ".xml";
                     var xmldoc = document.toString({ pretty: true });
