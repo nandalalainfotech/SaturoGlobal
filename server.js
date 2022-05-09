@@ -120,11 +120,13 @@ function createLegandXml(req, res, sheet, folderName) {
 
                 orderNumber = orderNumber + 1;
                 if (orderNumber > 1 && (tempLigand_1 == "" || tempLigand_1 != xlData.Ligand_1)) {
+                    if (disease != undefined && disease != "NA") {
                     doc2 = doc.ele('disease');
                     doc2 = doc2.ele('original-disease-name').txt(disease).up().up()
+                   
+                    }
                     doc = doc.doc();
-
-                    let filePath = "uploads/xmlfiles/" + folderName + "/" + fileName + "_" + "_" + orderNumber + ".xml";
+                    let filePath = "uploads/xmlfiles/" + folderName + "/" + fileName + ".xml";
                     var xmldoc = doc.toString({ pretty: true });
                     fs.writeFile(filePath, xmldoc, err => {
                         console.log("error in file writting ", err);
@@ -134,9 +136,12 @@ function createLegandXml(req, res, sheet, folderName) {
 
                     if (tempLigant == "" || tempLigant != xlData.Ligand_11) {
                         if (tempLigand_1 == "" || tempLigand_1 != xlData.Ligand_1) {
-                            doc = create("ligand")
+                            doc = create("ligand" , {
+                                version: '1.0',
+                                encoding: 'UTF-8'
+                              })
+                              doc.att('xsi:noNamespaceSchemaLocation', 'http://ent-ref-dev/xsd/base/bioactivity/5/bioactivity-bmv.xsd');
                             doc.att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-                            doc.att('xsi:noNamespaceSchemaLocation', 'http://ent-ref-dev/xsd/base/bioactivity/5/bioactivity-bmv.xsd');
                             let Ligand1 = xlData.Ligand ? xlData.Ligand.split('">')[0] ? xlData.Ligand.split('">')[0] : "" : "";
                             let LigandText1 = xlData.Ligand ? xlData.Ligand.split('">')[1] ? xlData.Ligand.split('">')[1] : "" : "";
                             doc = doc.ele('ligand-uri', { 'ligand-record-id': Ligand1 }).txt(LigandText1).up();
@@ -201,7 +206,7 @@ function createLegandXml(req, res, sheet, folderName) {
                                 doc = doc.ele('route-of-administration').txt(xlData.Assay_6).up()
                             }
 
-
+                            if ( (xlData.Assay_11 != undefined && xlData.Assay_11 != "NA") || (xlData.Assay_12 != undefined && xlData.Assay_12 != "NA") || (xlData.Assay_13 != undefined && xlData.Assay_13 != "NA") || (xlData.Assay_14 != undefined && xlData.Assay_14 != "NA") || (xlData.Assay_15 != undefined && xlData.Assay_15 != "NA") ) {
                             doc = doc.ele('ligand-dose');
                             if (xlData.Assay_11 != undefined && xlData.Assay_11 != "NA") {
                                 doc = doc.ele('single-value').txt(xlData.Assay_11).up()
@@ -219,7 +224,7 @@ function createLegandXml(req, res, sheet, folderName) {
                                 doc = doc.ele('unit').txt(xlData.Assay_15).up()
                             }
                             doc = doc.up()
-
+                        }
                             if (xlData.Assay_8 != undefined && xlData.Assay_8 != "NA") {
                                 doc = doc.ele('administration-regimen').txt(xlData.Assay_8).up()
                             }
@@ -247,7 +252,7 @@ function createLegandXml(req, res, sheet, folderName) {
                             }
 
                             fileName = 'biocur' + '.' + Ligand3 + "." + LigandText2;
-
+                            if ( (xlData.Assay_16 != undefined && xlData.Assay_16 != "NA") || (xlData.Assay_17 != undefined && xlData.Assay_17 != "NA") || (xlData.Assay_18 != undefined && xlData.Assay_18 != "NA") || (xlData.Assay_20 != undefined && xlData.Assay_20 != "NA") || (xlData.Assay_21 != undefined && xlData.Assay_21 != "NA") || (xlData.Assay_22 != undefined && xlData.Assay_22 != "NA") || (xlData.Assay_23 != undefined && xlData.Assay_23 != "NA") || (xlData.Assay_24 != undefined && xlData.Assay_24 != "NA") ) {
                             doc = doc.ele('condition');
                             if (xlData.Assay_16 != undefined && xlData.Assay_16 != "NA") {
                                 doc = doc.ele('type').txt(xlData.Assay_16).up()
@@ -277,7 +282,7 @@ function createLegandXml(req, res, sheet, folderName) {
                             }
                             doc = doc.up()
                             doc = doc.up()
-
+                        }
                             doc = doc.ele('measurement')
 
                             if (xlData.Measurement != undefined && xlData.Measurement != "NA") {
@@ -398,7 +403,7 @@ function createLegandXml(req, res, sheet, folderName) {
                     if (xlData.Assay_6 != undefined && xlData.Assay_6 != "NA") {
                         doc1 = doc1.ele('route-of-administration').txt(xlData.Assay_6).up()
                     }
-
+                    if ( (xlData.Assay_11 != undefined && xlData.Assay_11 != "NA") || (xlData.Assay_12 != undefined && xlData.Assay_12 != "NA") || (xlData.Assay_13 != undefined && xlData.Assay_13 != "NA") || (xlData.Assay_14 != undefined && xlData.Assay_14 != "NA") || (xlData.Assay_15 != undefined && xlData.Assay_15 != "NA") ) {
                     doc1 = doc1.ele('ligand-dose');
                     if (xlData.Assay_11 != undefined && xlData.Assay_11 != "NA") {
                         doc1 = doc1.ele('single-value').txt(xlData.Assay_11).up()
@@ -416,6 +421,7 @@ function createLegandXml(req, res, sheet, folderName) {
                         doc1 = doc1.ele('unit').txt(xlData.Assay_15).up()
                     }
                     doc1 = doc1.up()
+                }
                     
                     if (xlData.Assay_8 != undefined && xlData.Assay_8 != "NA") {
                         doc1 = doc1.ele('administration-regimen').txt(xlData.Assay_8).up()
@@ -434,7 +440,7 @@ function createLegandXml(req, res, sheet, folderName) {
                             doc1 = doc1.ele('target-uri', { 'target-record-id': target0 }).txt(targetText).up()
                         }
                     }
-                 
+                    if ( (xlData.Assay_16 != undefined && xlData.Assay_16 != "NA") || (xlData.Assay_17 != undefined && xlData.Assay_17 != "NA") || (xlData.Assay_18 != undefined && xlData.Assay_18 != "NA") || (xlData.Assay_20 != undefined && xlData.Assay_20 != "NA") || (xlData.Assay_21 != undefined && xlData.Assay_21 != "NA") || (xlData.Assay_22 != undefined && xlData.Assay_22 != "NA") || (xlData.Assay_23 != undefined && xlData.Assay_23 != "NA") || (xlData.Assay_24 != undefined && xlData.Assay_24 != "NA") ) {
                     doc1 = doc1.ele('condition');
                     if (xlData.Assay_16 != undefined && xlData.Assay_16 != "NA") {
                         doc1 = doc1.ele('type').txt(xlData.Assay_16).up()
@@ -464,7 +470,7 @@ function createLegandXml(req, res, sheet, folderName) {
                     }
                     doc1 = doc1.up()
                     doc1 = doc1.up()
-                    
+                }
                     doc1 = doc1.ele('measurement')
 
                     if (xlData.Measurement != undefined && xlData.Measurement != "NA") {
@@ -568,13 +574,14 @@ function createLegandXml(req, res, sheet, folderName) {
             }
         }
     }
-
+    if (disease != undefined && disease != "NA") {
     doc2 = doc.ele('disease');
 
     doc2 = doc2.ele('original-disease-name').txt(disease).up().up()
+   
+    }
     doc = doc.doc();
-
-    let filePath = "uploads/xmlfiles/" + folderName + "/" + fileName + "_" + "_" + orderNumber + ".xml";
+    let filePath = "uploads/xmlfiles/" + folderName + "/" + fileName + ".xml";
 
     var xmldoc = doc.toString({ pretty: true });
     fs.writeFile(filePath, xmldoc, err => {
@@ -599,9 +606,13 @@ function createTargetXml(req, res, sheet, folderName) {
                 try {
                     let targetid = data.Target ? data.Target.split('">')[0] ? data.Target.split('">')[0] : "" : "";
                     let targetTexts = data.Target ? data.Target.split('">')[1] ? data.Target.split('">')[1] : "" : "";
-                    document = create("target")
+                  
+                    document = create("target" , {
+                        version: '1.0',
+                        encoding: 'UTF-8'
+                      })
+                      document.att('xsi:noNamespaceSchemaLocation', 'http://ent-ref-dev/xsd/base/bioactivity/5/bioactivity-bmv.xsd');
                     document.att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-                    document.att('xsi:noNamespaceSchemaLocation', 'http://ent-ref-dev/xsd/base/bioactivity/5/bioactivity-bmv.xsd');
                     document = document.ele('target-uri', { 'target-record-id': targetid }).txt(targetTexts).up()
 
                     if (data.Target_1 != undefined && data.Target_1 != "NA") {
@@ -639,7 +650,7 @@ function createTargetXml(req, res, sheet, folderName) {
                         document = document.ele('client-preferred-name').txt(data.Target_11).up()
                     }
                     document = document.doc();
-
+                   
                     let target0 = data.Target ? data.Target.split('">')[0] ? data.Target.split('">')[0] : "" : "";
                     let target3 = target0 ? target0.split('/')[2] ? target0.split('/')[2] : "" : "";
                     let targetText = data.Target ? data.Target.split('">')[1] ? data.Target.split('">')[1] : "" : "";
@@ -647,7 +658,7 @@ function createTargetXml(req, res, sheet, folderName) {
 
                     TargetfileName = 'biocur' + '.' + target3 + '.' + targetText1;
 
-                    let filePath = "uploads/xmlfiles/" + folderName + "/" + TargetfileName + "_" + orderNumber + ".xml";
+                    let filePath = "uploads/xmlfiles/" + folderName + "/" + TargetfileName +".xml";
                     var xmldoc = document.toString({ pretty: true });
                     fs.writeFile(filePath, xmldoc, err => { if (err) { return console.log(err); } });
                 } catch (error) {
