@@ -169,6 +169,10 @@ function createLegandXml(req, res, sheet, folderName) {
                                 doc = doc.ele('collection-id').txt(xlData.Ligand_7).up();
                             }
 
+                            if (xlData.Ligand_8 != undefined && xlData.Ligand_8 != "NA") {
+                                doc = doc.ele('ligand-detail').txt(xlData.Ligand_8).up();
+                            }
+
                             if (xlData.Ligand_11 != undefined && xlData.Ligand_11 != "NA") {
                                 doc = doc.ele('locator').txt(xlData.Ligand_11).up();
                             }
@@ -305,9 +309,9 @@ function createLegandXml(req, res, sheet, folderName) {
                             if (xlData.Measurement_6 != undefined && xlData.Measurement_6 != "NA") {
                                 doc = doc.ele('original-prefix').txt(xlData.Measurement_6).up()
                             }
-                            if (xlData.Measurement_7 != undefined || xlData.Measurement_7 != "NA") {
+                            if ((xlData.Measurement_7 != undefined && xlData.Measurement_7 != "NA") || (xlData.Measurement_8 != undefined && xlData.Measurement_8 != "NA") || (xlData.Measurement_10 != undefined && xlData.Measurement_10 != "NA") || (xlData.Measurement_11 != undefined && xlData.Measurement_11 != "NA") || (xlData.Measurement_12 != undefined && xlData.Measurement_12 != "NA") || (xlData.Measurement_13 != undefined && xlData.Measurement_13 != "NA")) {
                                 doc = doc.ele('original-value')
-                            }
+                            
 
                             if (xlData.Measurement_7 != undefined && xlData.Measurement_7 != "NA") {
                                 doc = doc.ele('single-value').txt(xlData.Measurement_7).up()
@@ -328,6 +332,7 @@ function createLegandXml(req, res, sheet, folderName) {
                                 doc = doc.ele('non-numeric-value').txt(xlData.Measurement_13).up()
                             }
                             doc = doc.up()
+                        }
                             if (xlData.Measurement_16 != undefined && xlData.Measurement_16 != "NA") {
                                 doc = doc.ele('remarks').txt(xlData.Measurement_16).up()
                             }
@@ -491,9 +496,10 @@ function createLegandXml(req, res, sheet, folderName) {
                     if (xlData.Measurement_6 != undefined && xlData.Measurement_6 != "NA") {
                         doc1 = doc1.ele('original-prefix').txt(xlData.Measurement_6).up()
                     }
-                    if (xlData.Measurement_7 != "NA" || xlData.Measurement_8 != "NA") {
+                    // if (xlData.Measurement_7 != "NA" || xlData.Measurement_8 != "NA") {
+                        if ((xlData.Measurement_7 != undefined && xlData.Measurement_7 != "NA") || (xlData.Measurement_8 != undefined && xlData.Measurement_8 != "NA") || (xlData.Measurement_10 != undefined && xlData.Measurement_10 != "NA") || (xlData.Measurement_11 != undefined && xlData.Measurement_11 != "NA") || (xlData.Measurement_12 != undefined && xlData.Measurement_12 != "NA") || (xlData.Measurement_13 != undefined && xlData.Measurement_13 != "NA")) {
                         doc1 = doc1.ele('original-value')
-                    }
+                    
 
                     if (xlData.Measurement_7 != undefined && xlData.Measurement_7 != "NA") {
                         doc1 = doc1.ele('single-value').txt(xlData.Measurement_7).up()
@@ -515,10 +521,11 @@ function createLegandXml(req, res, sheet, folderName) {
                         doc1 = doc1.ele('non-numeric-value').txt(xlData.Measurement_13).up()
                     }
                     doc1 = doc1.up()
+                }
                     if (xlData.Measurement_16 != undefined && xlData.Measurement_16 != "NA") {
                         doc1 = doc1.ele('remarks').txt(xlData.Measurement_16).up()
                     }
-                  //  doc1 = doc1.up()
+                   doc1 = doc1.up()
 
                     if (xlData.Biologicalsystem != undefined || xlData.Biologicalsystem != "NA") {
                         doc1 = doc1.ele('biological-system')
