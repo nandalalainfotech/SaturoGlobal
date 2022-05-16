@@ -23,6 +23,7 @@ const folder = './uploads/';
 var orderNumber = 0;
 var fileName = "";
 var disease = "";
+var registrynumber = "";
 var uploadfileName = "";
 let TargetfileName = '';
 let fileArray = [];
@@ -68,7 +69,7 @@ app.post('/upload', function (req, res, next) {
             }
             return 0;
         });
-       
+        
         createXmlFolder(req, res, sheet);
     });
 });
@@ -120,11 +121,20 @@ function createLegandXml(req, res, sheet, folderName) {
 
                 orderNumber = orderNumber + 1;
                 if (orderNumber > 1 && (tempLigand_1 == "" || tempLigand_1 != xlData.Ligand_1)) {
-                    if (disease != undefined && disease != "NA") {
+                    if ( disease != "" && disease != undefined  && disease != "NA") {
                     doc2 = doc.ele('disease');
                     doc2 = doc2.ele('original-disease-name').txt(disease).up().up()
                    
                     }
+
+                    if (registrynumber != "" && registrynumber != undefined && registrynumber != "NA" && registrynumber != "RQ") {
+                        doc3 = doc.ele('substance-match');
+                        doc3 = doc3.ele('type').txt("SaturoGlobal curated").up();
+                        doc3 = doc3.ele('ordinal').txt("1").up();
+                        doc3 = doc3.ele('substance-uri').txt(registrynumber).up().up()
+                       
+                        }
+
                     doc = doc.doc();
                     let filePath = "uploads/xmlfiles/" + folderName + "/" + fileName + ".xml";
                     var xmldoc = doc.toString({ pretty: true });
@@ -160,32 +170,70 @@ function createLegandXml(req, res, sheet, folderName) {
                                 doc = doc.ele('ligand-type').txt(xlData.Ligand_5).up();
                             }
 
+                            if (xlData.Ligand_9 != undefined && xlData.Ligand_9 != "NA") {
+                                doc = doc.ele('collection-id').txt(xlData.Ligand_9).up();
+                                registrynumber= xlData.Ligand_9;
+                            }
 
                             if (xlData.Ligand_6 != undefined && xlData.Ligand_6 != "NA") {
-                                doc = doc.ele('collection-name').txt(xlData.Ligand_6).up();
+                                doc = doc.ele('identifier')
+
+                                if (xlData.Ligand_6 != undefined && xlData.Ligand_6 != "NA") {
+                                    doc = doc.ele('context').txt("original name").up();
+                                }
+                                if (xlData.Ligand_6 != undefined && xlData.Ligand_6 != "NA") {
+                                    doc = doc.ele('id').txt(xlData.Ligand_6).up();
+                                }
+                                doc = doc.up()
                             }
 
-                            if (xlData.Ligand_7 != undefined && xlData.Ligand_7 != "NA") {
-                                doc = doc.ele('collection-id').txt(xlData.Ligand_7).up();
+                            if(xlData.Ligand_7 != undefined && xlData.Ligand_7 != "NA") {
+                                doc = doc.ele('identifier')
+                                
+                                if (xlData.Ligand_7 != undefined && xlData.Ligand_7 != "NA") {
+                                    doc = doc.ele('context').txt("original name").up();
+                                }
+                                if (xlData.Ligand_7 != undefined && xlData.Ligand_7 != "NA") {
+                                    doc = doc.ele('id').txt(xlData.Ligand_7).up();
+                                }
+                                doc = doc.up()
+                            }
+                            if (xlData.Ligand_8 != undefined && xlData.Ligand_8 != "NA")  {
+                                doc = doc.ele('identifier')
+                                
+                                if (xlData.Ligand_8 != undefined && xlData.Ligand_8 != "NA") {
+                                    doc = doc.ele('context').txt("original name").up();
+                                }
+                                if (xlData.Ligand_8 != undefined && xlData.Ligand_8 != "NA") {
+                                    doc = doc.ele('id').txt(xlData.Ligand_8).up();
+                                }
+                                doc = doc.up()
                             }
 
-                            if (xlData.Ligand_8 != undefined && xlData.Ligand_8 != "NA") {
-                                doc = doc.ele('ligand-detail').txt(xlData.Ligand_8).up();
+                            if (xlData.Ligand_10 != undefined && xlData.Ligand_10 != "NA") {
+                                doc = doc.ele('ligand-detail').txt(xlData.Ligand_10).up();
                             }
 
-                            if (xlData.Ligand_11 != undefined && xlData.Ligand_11 != "NA") {
-                                doc = doc.ele('locator').txt(xlData.Ligand_11).up();
+                            if (xlData.Ligand_13 != undefined && xlData.Ligand_13!= "NA") {
+                                doc = doc.ele('locator').txt(xlData.Ligand_13).up();
                             }
 
-
+                            if ((xlData.Reference_1 != undefined && xlData.Reference_1 != "NA" ) || (xlData.Reference_2 != undefined && xlData.Reference_2 != "NA") ) {
                             doc = doc.ele('reference');
                             if (xlData.Reference_1 != undefined && xlData.Reference_1 != "NA") {
                                 doc = doc.ele('source-type').txt(xlData.Reference_1).up()
                             }
 
                             if (xlData.Reference_2 != undefined && xlData.Reference_2 != "NA") {
-                                doc = doc.ele('citation').txt(xlData.Reference_2).up().up()
+                                doc = doc.ele('citation').txt(xlData.Reference_2).up()
                             }
+
+                            if (xlData.Reference_2 != undefined && xlData.Reference_2 != "NA") {
+                                doc = doc.ele('related-document').txt(xlData.Reference_2).up()
+                            }
+                            doc = doc.up()
+                        }
+                           
 
                             doc = doc.ele('assay')
 
@@ -267,7 +315,7 @@ function createLegandXml(req, res, sheet, folderName) {
                             if (xlData.Assay_18 != undefined && xlData.Assay_18 != "NA") {
                                 doc = doc.ele('material-id').txt(xlData.Assay_18).up()
                             } 
-                          
+                            if ((xlData.Assay_20 != undefined && xlData.Assay_20 != "NA") || (xlData.Assay_21 != undefined && xlData.Assay_21 != "NA") || (xlData.Assay_22 != undefined && xlData.Assay_22 != "NA") || (xlData.Assay_23 != undefined && xlData.Assay_23 != "NA") || (xlData.Assay_24 != undefined && xlData.Assay_24 != "NA")) {
                             doc = doc.ele('value');
                             if (xlData.Assay_20 != undefined && xlData.Assay_20 != "NA") {
                                 doc = doc.ele('single-value').txt(xlData.Assay_20).up()
@@ -285,6 +333,7 @@ function createLegandXml(req, res, sheet, folderName) {
                                 doc = doc.ele('unit').txt(xlData.Assay_24).up()
                             }
                             doc = doc.up()
+                        }
                             doc = doc.up()
                         }
                             doc = doc.ele('measurement')
@@ -386,6 +435,7 @@ function createLegandXml(req, res, sheet, folderName) {
                             doc = doc.up()
                             doc = doc.up()
                             disease = xlData.Disease_1;
+                            
                         }
                     }
                 }
@@ -456,7 +506,7 @@ function createLegandXml(req, res, sheet, folderName) {
                     if (xlData.Assay_18 != undefined && xlData.Assay_18 != "NA") {
                         doc1 = doc1.ele('material-id').txt(xlData.Assay_18).up()
                     } 
-                  
+                    if ((xlData.Assay_20 != undefined && xlData.Assay_20 != "NA") || (xlData.Assay_21 != undefined && xlData.Assay_21 != "NA") || (xlData.Assay_22 != undefined && xlData.Assay_22 != "NA") || (xlData.Assay_23 != undefined && xlData.Assay_23 != "NA") || (xlData.Assay_24 != undefined && xlData.Assay_24 != "NA")) {
                     doc1 = doc1.ele('value');
                     if (xlData.Assay_20 != undefined && xlData.Assay_20 != "NA") {
                         doc1 = doc1.ele('single-value').txt(xlData.Assay_20).up()
@@ -474,6 +524,7 @@ function createLegandXml(req, res, sheet, folderName) {
                         doc1 = doc1.ele('unit').txt(xlData.Assay_24).up()
                     }
                     doc1 = doc1.up()
+                }
                     doc1 = doc1.up()
                 }
                     doc1 = doc1.ele('measurement')
@@ -556,7 +607,7 @@ function createLegandXml(req, res, sheet, folderName) {
                         doc1 = doc1.ele('species').txt(xlData.Biologicalsystem_5).up()
                     }
 
-                    if (doc1.Biologicalsystem_6 != undefined && xlData.Biologicalsystem_6 != "NA") {
+                    if (xlData.Biologicalsystem_6 != undefined && xlData.Biologicalsystem_6 != "NA") {
                         doc1 = doc1.ele('species-detail').txt(xlData.Biologicalsystem_6).up()
                     }
 
@@ -587,6 +638,13 @@ function createLegandXml(req, res, sheet, folderName) {
     doc2 = doc2.ele('original-disease-name').txt(disease).up().up()
    
     }
+
+    if (registrynumber != ""  && registrynumber != undefined && registrynumber != "NA" && registrynumber != "RQ") {
+        doc3 = doc.ele('substance-match');
+        doc3 = doc3.ele('type').txt("SaturoGlobal curated").up();
+        doc3 = doc3.ele('ordinal').txt("1").up();
+        doc3 = doc3.ele('substance-uri').txt(registrynumber).up().up()
+        }
     doc = doc.doc();
     let filePath = "uploads/xmlfiles/" + folderName + "/" + fileName + ".xml";
 
