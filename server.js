@@ -24,7 +24,7 @@ var orderNumber = 0;
 var fileName = "";
 var disease = "";
 var registrynumber = "";
-var uploadfileName = "";
+var uploadfileName = [];
 let TargetfileName = '';
 let fileArray = [];
 
@@ -38,7 +38,7 @@ var storage = multer.diskStorage({
     },
     filename: function (req, file, callback) {
         callback(null, file.originalname);
-        uploadfileName = file.originalname;
+        uploadfileName.push(file.originalname);
     }
 });
 
@@ -55,9 +55,9 @@ app.post('/upload', function (req, res, next) {
         if (err) {
             return res.status(500).end("Something went wrong:");
         }
-
+        for(let i=0;i<uploadfileName.length;i++){
         const reader = require('xlsx')
-        const file = reader.readFile('./uploads/' + uploadfileName)
+        const file = reader.readFile('./uploads/' + uploadfileName[i])
         const sheet1 = reader.utils.sheet_to_json(file.Sheets[file.SheetNames[0]]);
         sheet = JSON.parse(JSON.stringify(sheet1).replace(/\s(?=\w+":)/g, ""));
         sheet.sort(function (a, b) {
@@ -71,6 +71,7 @@ app.post('/upload', function (req, res, next) {
         });
         
         createXmlFolder(req, res, sheet);
+    }
     });
 });
 
@@ -129,7 +130,7 @@ function createLegandXml(req, res, sheet, folderName) {
 
                     if (registrynumber != "" && registrynumber != undefined && registrynumber != "NA" && registrynumber != "RQ") {
                         doc3 = doc.ele('substance-match');
-                        doc3 = doc3.ele('type').txt("SaturoGlobal curated").up();
+                        doc3 = doc3.ele('type').txt("partner curated").up();
                         doc3 = doc3.ele('ordinal').txt("1").up();
                         doc3 = doc3.ele('substance-uri').txt(registrynumber).up().up()
                        
@@ -243,7 +244,7 @@ function createLegandXml(req, res, sheet, folderName) {
 
                             if (xlData.Assay_1 != undefined && xlData.Assay_1 != "NA") {
                                 doc = doc.ele('collection-id').txt(xlData.Assay_1).up()
-                            }
+                            } 
 
                             if (xlData.Assay_2 != undefined && xlData.Assay_2 != "NA") {
                                 doc = doc.ele('assay-type').txt(xlData.Assay_2).up()
@@ -641,7 +642,7 @@ function createLegandXml(req, res, sheet, folderName) {
 
     if (registrynumber != ""  && registrynumber != undefined && registrynumber != "NA" && registrynumber != "RQ") {
         doc3 = doc.ele('substance-match');
-        doc3 = doc3.ele('type').txt("SaturoGlobal curated").up();
+        doc3 = doc3.ele('type').txt("partner curated").up();
         doc3 = doc3.ele('ordinal').txt("1").up();
         doc3 = doc3.ele('substance-uri').txt(registrynumber).up().up()
         }
@@ -760,9 +761,14 @@ function deleteFolderFiles(req, res) {
             console.log("file deleted");
         }
     }
-    fs.unlink("./uploads/" + req.files[0].filename, resultHandler);
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).send(fileArray);
+    for(let count_i = 0;count_i <  req.files.length; count_i ++){
+        fs.unlink("./uploads/" + req.files[count_i].filename, resultHandler);
+    }
+    // fs.unlink("./uploads/" + req.files[0].filename, resultHandler);
+    // res.setHeader('Content-Type', 'application/json');
+    // res.status(200).send(fileArray);
+    uploadfileName = [];
+    res.end();
 
 }
 
