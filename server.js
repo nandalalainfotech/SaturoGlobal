@@ -9,6 +9,7 @@ var express = require('express');
 const { create } = require('xmlbuilder');
 var app = express();
 const child_process = require('child_process');
+var validator = require('xsd-schema-validator');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -139,6 +140,24 @@ function createLegandXml(req, res, sheet, folderName) {
                     doc = doc.doc();
                     let filePath = "uploads/xmlfiles/" + folderName + "/" + fileName + ".xml";
                     var xmldoc = doc.toString({ pretty: true });
+
+
+                    validator.validateXML(xmldoc, './resources/bioactivity.xsd', function (err, result) {
+
+                        if (err) {
+                            fs.writeFileSync('./resources/errortext'+'_'+folderName+'.txt', folderName+"\n" + "in"+"  " + fileName +"  "+ err.message);
+                        }
+                        
+                        if(err){
+                            fs.rmdir('./uploads/xmlfiles'+'/'+folderName,{ recursive: true }, (err) => {
+                                // if (err) {
+                                // return console.log("error occurred in deleting directory", err);
+                                // }
+                                console.log("Directory deleted successfully");
+                        });
+                        }
+                    });
+              
                     fs.writeFile(filePath, xmldoc, err => {
                         console.log("error in file writting ", err);
                     });
@@ -454,7 +473,9 @@ function createLegandXml(req, res, sheet, folderName) {
                         doc1 = doc1.ele('assay-type').txt(xlData.Assay_2).up()
                     }
                     if (xlData.Measurement_1 != undefined && xlData.Measurement_1 != "NA" && xlData.Measurement_1 == "TOX") {
+                        if (xlData.Assay_4 != undefined && xlData.Assay_4 != "NA") {
                         doc1 = doc1.ele('toxicity-type').txt(xlData.Assay_4).up()
+                        }
                     }
                     if (xlData.Assay_6 != undefined && xlData.Assay_6 != "NA") {
                         doc1 = doc1.ele('route-of-administration').txt(xlData.Assay_6).up()
@@ -650,10 +671,25 @@ function createLegandXml(req, res, sheet, folderName) {
     let filePath = "uploads/xmlfiles/" + folderName + "/" + fileName + ".xml";
 
     var xmldoc = doc.toString({ pretty: true });
+
+    validator.validateXML(xmldoc, './resources/bioactivity.xsd', function (err, result) {
+
+        if (err) {
+            fs.writeFileSync('./resources/errortext'+'_'+folderName+'.txt', folderName+"\n" + "in"+"  " + fileName +"  "+ err.message);
+        }
+        
+        if(err){
+            fs.rmdir('./uploads/xmlfiles'+'/'+folderName,{ recursive: true }, (err) => {
+                // if (err) {
+                // return console.log("error occurred in deleting directory", err);
+                // }
+                console.log("Directory deleted successfully");
+        });
+        }
+    });
+
     fs.writeFile(filePath, xmldoc, err => {
-
         console.log("error in file writting ", err);
-
     });
     createTargetXml(req, res, sheet, folderName);
 }
@@ -726,6 +762,23 @@ function createTargetXml(req, res, sheet, folderName) {
 
                     let filePath = "uploads/xmlfiles/" + folderName + "/" + TargetfileName +".xml";
                     var xmldoc = document.toString({ pretty: true });
+
+             validator.validateXML(xmldoc, './resources/bioactivity.xsd', function (err, result) {
+
+              if (err) {
+             fs.writeFileSync('./resources/errortext'+'_'+folderName+'.txt', folderName+"\n" + "in"+"  " + fileName +"  "+ err.message);
+              }
+        
+            if(err){
+            fs.rmdir('./uploads/xmlfiles'+'/'+folderName,{ recursive: true }, (err) => {
+                // if (err) {
+                // return console.log("error occurred in deleting directory", err);
+                // }
+                console.log("Directory deleted successfully");
+            });
+            }
+            });
+                    
                     fs.writeFile(filePath, xmldoc, err => { if (err) { return console.log(err); } });
                 } catch (error) {
                     console.log("Exception Occured  ", data.Link, "  ", error);

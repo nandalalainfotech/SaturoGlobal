@@ -31,6 +31,7 @@
     "xlsx": "^0.18.5",
     "xml-js": "^1.6.11",
     "xml2js": "^0.4.23",
-    "xmlbuilder": "^15.1.1"
+    "xmlbuilder": "^15.1.1",
+    "xsd-schema-validator": "^0.7.0"
   }
 }
